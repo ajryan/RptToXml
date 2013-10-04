@@ -59,12 +59,18 @@ namespace RptToXml
 
 		public void WriteToXml(System.IO.Stream output)
 		{
-			WriteToXml(XmlWriter.Create(output, new XmlWriterSettings() { Indent = true }));
+			using (XmlWriter writer = XmlWriter.Create(output, new XmlWriterSettings() { Indent = true }))
+			{
+		        	WriteToXml(writer);
+			}
 		}
 
 		public void WriteToXml(string targetXmlPath)
 		{
-			WriteToXml(XmlWriter.Create(targetXmlPath, new XmlWriterSettings() { Indent = true }));
+			using (XmlWriter writer = XmlWriter.Create(targetXmlPath, new XmlWriterSettings() { Indent = true }))
+			{
+				WriteToXml(writer);
+			}
 		}
 
 		public void WriteToXml(XmlWriter writer)
