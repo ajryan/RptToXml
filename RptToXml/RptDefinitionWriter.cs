@@ -74,6 +74,7 @@ namespace RptToXml
 			writer.WriteStartDocument();
 			ProcessReport(Report, writer);
 			writer.WriteEndDocument();
+			writer.Flush();
 		}
 
 		private void ProcessReport(ReportDocument report, XmlWriter writer)
