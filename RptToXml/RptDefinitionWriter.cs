@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Xml;
 using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.ReportAppServer.ClientDoc;
 using CrystalDecisions.Shared;
 
 namespace RptToXml
@@ -37,6 +38,8 @@ namespace RptToXml
 
 		private ReportDocument Report { get; set; }
 
+		private ISCDReportClientDocument ReportClientDocument { get; set; }
+
 		public FormatTypes ShowFormatTypes
 		{
 			get { return _showFormatTypes; }
@@ -47,6 +50,7 @@ namespace RptToXml
 		{
 			Report = new ReportDocument();
 			Report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
+			ReportClientDocument = Report.ReportClientDocument;
 
 			Trace.WriteLine("Loaded report");
 		}
@@ -59,12 +63,18 @@ namespace RptToXml
 
 		public void WriteToXml(System.IO.Stream output)
 		{
-			WriteToXml(XmlWriter.Create(output, new XmlWriterSettings() { Indent = true }));
+			using (XmlWriter writer = XmlWriter.Create(output, new XmlWriterSettings() { Indent = true }))
+			{
+				WriteToXml(writer);
+			}
 		}
 
 		public void WriteToXml(string targetXmlPath)
 		{
-			WriteToXml(XmlWriter.Create(targetXmlPath, new XmlWriterSettings() { Indent = true }));
+			using (XmlWriter writer = XmlWriter.Create(targetXmlPath, new XmlWriterSettings() { Indent = true }))
+			{
+				WriteToXml(writer);
+			}
 		}
 
 		public void WriteToXml(XmlWriter writer)
@@ -172,7 +182,8 @@ namespace RptToXml
 			WriteAndTraceStartElement(writer, "Database");
 
 			GetTableLinks(report, writer);
-			GetTables(report, writer);
+			//GetTables(report, writer);
+			GetReportClientTables(this.ReportClientDocument, writer);
 
 			writer.WriteEndElement();
 
@@ -225,7 +236,19 @@ namespace RptToXml
 
 		}
 
-		private static void GetTable(Table table, XmlWriter writer)
+		private void GetReportClientTables(ISCDReportClientDocument reportClientDocument, XmlWriter writer)
+		{
+			WriteAndTraceStartElement(writer, "Tables");
+			
+			foreach (CrystalDecisions.ReportAppServer.DataDefModel.Table table in reportClientDocument.DatabaseController.Database.Tables)
+			{
+				GetTable(table, writer);
+			}
+
+			writer.WriteEndElement();
+		}
+
+		private void GetTable(Table table, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "Table");
 
@@ -238,6 +261,48 @@ namespace RptToXml
 
 			foreach (FieldDefinition fd in table.Fields)
 				GetFieldDefinition(fd, writer);
+
+			writer.WriteEndElement();
+
+			writer.WriteEndElement();
+
+		}
+
+		private void GetTable(CrystalDecisions.ReportAppServer.DataDefModel.Table table, XmlWriter writer)
+		{
+			WriteAndTraceStartElement(writer, "Table");
+
+			writer.WriteAttributeString("Alias", table.Alias);
+			writer.WriteAttributeString("ClassName", table.ClassName);
+			writer.WriteAttributeString("Name", table.Name);
+
+			WriteAndTraceStartElement(writer, "ConnectionInfo");
+			foreach (string propertyId in table.ConnectionInfo.Attributes.PropertyIDs)
+			{
+				// make attribute name safe for XML
+				string attributeName = propertyId.Replace(" ", "_");
+
+				writer.WriteAttributeString(attributeName, table.ConnectionInfo.Attributes[propertyId].ToString());
+			}
+			
+			writer.WriteAttributeString("UserName", table.ConnectionInfo.UserName);
+			writer.WriteAttributeString("Password", table.ConnectionInfo.Password);
+			writer.WriteEndElement();
+			
+			if (table is CrystalDecisions.ReportAppServer.DataDefModel.CommandTable)
+			{
+				var cmdTable = (CrystalDecisions.ReportAppServer.DataDefModel.CommandTable)table;
+				WriteAndTraceStartElement(writer, "Command");
+				writer.WriteString(cmdTable.CommandText);
+				writer.WriteEndElement();
+			}
+
+			WriteAndTraceStartElement(writer, "Fields");
+
+			foreach (CrystalDecisions.ReportAppServer.DataDefModel.Field fd in table.DataFields)
+			{
+				GetFieldDefinition(fd, writer);
+			}
 
 			writer.WriteEndElement();
 
@@ -285,6 +350,25 @@ namespace RptToXml
 			writer.WriteAttributeString("NumberOfBytes", fd.NumberOfBytes.ToString());
 			writer.WriteAttributeString("ValueType", fd.ValueType.ToString());
 
+			writer.WriteEndElement();
+
+		}
+
+		private static void GetFieldDefinition(CrystalDecisions.ReportAppServer.DataDefModel.Field fd, XmlWriter writer)
+		{
+			WriteAndTraceStartElement(writer, "Field");
+
+			writer.WriteAttributeString("Description", fd.Description);
+			writer.WriteAttributeString("FormulaForm", fd.FormulaForm);
+			writer.WriteAttributeString("HeadingText", fd.HeadingText);
+			writer.WriteAttributeString("IsRecurring", fd.IsRecurring.ToString());
+			writer.WriteAttributeString("Kind", fd.Kind.ToString());
+			writer.WriteAttributeString("Length", fd.Length.ToString());
+			writer.WriteAttributeString("LongName", fd.LongName);
+			writer.WriteAttributeString("Name", fd.Name);
+			writer.WriteAttributeString("ShortName", fd.ShortName);
+			writer.WriteAttributeString("Type", fd.Type.ToString());
+			
 			writer.WriteEndElement();
 
 		}
