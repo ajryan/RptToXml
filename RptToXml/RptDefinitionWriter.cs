@@ -182,8 +182,10 @@ namespace RptToXml
 			WriteAndTraceStartElement(writer, "Database");
 
 			GetTableLinks(report, writer);
-			//GetTables(report, writer);
-			GetReportClientTables(this.ReportClientDocument, writer);
+            if (report.IsSubreport)
+                GetTables(report, writer);
+            else
+                GetReportClientTables(this.ReportClientDocument, writer);
 
 			writer.WriteEndElement();
 
