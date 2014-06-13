@@ -20,7 +20,7 @@ namespace RptToXml
 
 		public RptDefinitionWriter(string filename)
 		{
-      _createdReport = true;
+			_createdReport = true;
 			_report = new ReportDocument();
 			_report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
 
@@ -284,7 +284,7 @@ namespace RptToXml
 			writer.WriteAttributeString("Name", fd.Name);
 			writer.WriteAttributeString("ShortName", fd.ShortName);
 			writer.WriteAttributeString("Type", fd.Type.ToString());
-      writer.WriteAttributeString("UseCount", fd.UseCount.ToString(CultureInfo.InvariantCulture));
+			writer.WriteAttributeString("UseCount", fd.UseCount.ToString(CultureInfo.InvariantCulture));
 			
 			writer.WriteEndElement();
 		}
@@ -717,7 +717,7 @@ namespace RptToXml
 					var fo = (FieldObject)reportObject;
 
 					if (fo.DataSource != null)
-            writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
+						writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 						GetColorFormat(fo.Color, writer);
@@ -766,28 +766,28 @@ namespace RptToXml
 			writer.WriteStartElement(elementName);
 		}
 
-	  public void Dispose()
-	  {
-	    Dispose(true);
-      GC.SuppressFinalize(this);
-	  }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-    protected virtual void Dispose(bool disposing)
-    {
-      if (disposing)
-      {
-        if (_report != null && _createdReport)
-        {
-          _report.Close();
-          _report.Dispose();
-          _report = null;
-        }
-      }
-    }
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (_report != null && _createdReport)
+				{
+					_report.Close();
+					_report.Dispose();
+					_report = null;
+				}
+			}
+		}
 
-    ~RptDefinitionWriter()
-    {
-      Dispose(false);
-    }
+		~RptDefinitionWriter()
+		{
+			Dispose(false);
+		}
 	}
 }
