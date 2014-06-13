@@ -286,6 +286,7 @@ namespace RptToXml
 			writer.WriteAttributeString("Name", fd.Name);
 			writer.WriteAttributeString("ShortName", fd.ShortName);
 			writer.WriteAttributeString("Type", fd.Type.ToString());
+            writer.WriteAttributeString("UseCount", fd.UseCount.ToString());
 			
 			writer.WriteEndElement();
 		}
