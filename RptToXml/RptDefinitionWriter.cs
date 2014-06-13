@@ -717,7 +717,7 @@ namespace RptToXml
 				{
 					var fo = (FieldObject)reportObject;
 
-					writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
+                    if (fo.DataSource != null) { writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName); }
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 						GetColorFormat(fo.Color, writer);
