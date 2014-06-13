@@ -56,6 +56,9 @@ namespace RptToXml
 			ProcessReport(_report, writer);
 			writer.WriteEndDocument();
 			writer.Flush();
+
+            _report.Close();
+            _report.Dispose();
 		}
 
 		private void ProcessReport(ReportDocument report, XmlWriter writer)
@@ -284,6 +287,7 @@ namespace RptToXml
 			writer.WriteAttributeString("Name", fd.Name);
 			writer.WriteAttributeString("ShortName", fd.ShortName);
 			writer.WriteAttributeString("Type", fd.Type.ToString());
+            writer.WriteAttributeString("UseCount", fd.UseCount.ToString());
 			
 			writer.WriteEndElement();
 		}
@@ -715,7 +719,7 @@ namespace RptToXml
 				{
 					var fo = (FieldObject)reportObject;
 
-					writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
+                    if (fo.DataSource != null) { writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName); }
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 						GetColorFormat(fo.Color, writer);
