@@ -11,20 +11,21 @@ using CRDataDefModel = CrystalDecisions.ReportAppServer.DataDefModel;
 
 namespace RptToXml
 {
-	public class RptDefinitionWriter
+	public class RptDefinitionWriter: IDisposable
 	{
 		private const FormatTypes ShowFormatTypes = FormatTypes.AreaFormat | FormatTypes.SectionFormat | FormatTypes.Color;
 
-		private readonly ReportDocument _report;
-		
+		private ReportDocument _report;
+		private bool _createdReport;
+
 		public RptDefinitionWriter(string filename)
 		{
+      _createdReport = true;
 			_report = new ReportDocument();
 			_report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
 
 			Trace.WriteLine("Loaded report");
 		}
-
 
 		public RptDefinitionWriter(ReportDocument value)
 		{
@@ -762,5 +763,29 @@ namespace RptToXml
 			Trace.WriteLine("  " + elementName);
 			writer.WriteStartElement(elementName);
 		}
+
+	  public void Dispose()
+	  {
+	    Dispose(true);
+      GC.SuppressFinalize(this);
+	  }
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        if (_report != null && _createdReport)
+        {
+          _report.Close();
+          _report.Dispose();
+          _report = null;
+        }
+      }
+    }
+
+    ~RptDefinitionWriter()
+    {
+      Dispose(false);
+    }
 	}
 }
