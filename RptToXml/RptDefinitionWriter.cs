@@ -11,20 +11,21 @@ using CRDataDefModel = CrystalDecisions.ReportAppServer.DataDefModel;
 
 namespace RptToXml
 {
-	public class RptDefinitionWriter
+	public class RptDefinitionWriter: IDisposable
 	{
 		private const FormatTypes ShowFormatTypes = FormatTypes.AreaFormat | FormatTypes.SectionFormat | FormatTypes.Color;
 
-		private readonly ReportDocument _report;
-		
+		private ReportDocument _report;
+		private bool _createdReport;
+
 		public RptDefinitionWriter(string filename)
 		{
+			_createdReport = true;
 			_report = new ReportDocument();
 			_report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
 
 			Trace.WriteLine("Loaded report");
 		}
-
 
 		public RptDefinitionWriter(ReportDocument value)
 		{
@@ -283,6 +284,7 @@ namespace RptToXml
 			writer.WriteAttributeString("Name", fd.Name);
 			writer.WriteAttributeString("ShortName", fd.ShortName);
 			writer.WriteAttributeString("Type", fd.Type.ToString());
+			writer.WriteAttributeString("UseCount", fd.UseCount.ToString(CultureInfo.InvariantCulture));
 			
 			writer.WriteEndElement();
 		}
@@ -714,7 +716,8 @@ namespace RptToXml
 				{
 					var fo = (FieldObject)reportObject;
 
-					writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
+					if (fo.DataSource != null)
+						writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 						GetColorFormat(fo.Color, writer);
@@ -761,6 +764,30 @@ namespace RptToXml
 		{
 			Trace.WriteLine("  " + elementName);
 			writer.WriteStartElement(elementName);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (_report != null && _createdReport)
+				{
+					_report.Close();
+					_report.Dispose();
+					_report = null;
+				}
+			}
+		}
+
+		~RptDefinitionWriter()
+		{
+			Dispose(false);
 		}
 	}
 }
