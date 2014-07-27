@@ -1,0 +1,1660 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Practices.EnterpriseLibrary.SemanticLogging</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ConsoleSinkElement">
+            <summary>
+            Represents a console configuration element that can create an instance of a console sink.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ISinkElement">
+            <summary>
+            Represents the contract for a sink configuration element.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ISinkElement.CanCreateSink(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance can create the specified configuration element.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+              <c>True</c> if this instance can create the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ISinkElement.CreateSink(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:System.IObserver`1"/> instance for this sink.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The observer instance.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ConsoleSinkElement.CanCreateSink(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance can create the specified configuration element.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+              <c>True</c> if this instance can create the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.ConsoleSinkElement.CreateSink(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:System.IObserver`1"/> instance for this sink.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The sink instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.Constants">
+            <summary>
+            Configuration constants and default values.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.Constants.Namespace">
+            <summary>
+            The configuration namespace.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.Constants.DefaultSessionNamePrefix">
+            <summary>
+            The default session name prefix.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.Constants.DefaultBufferingFlushAllTimeout">
+            <summary>
+            The default max timeout for flushing all pending events in the buffer.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.IFormatterElement">
+            <summary>
+            Represents the contract for creating formatters from configuration elements.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.IFormatterElement.CanCreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance can create the specified configuration element.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+              <c>True</c> if this instance can create formatter the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.IFormatterElement.CreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> instance.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The formatter instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.EventTextFormatterElement">
+            <summary>
+            Represents a configuration element that can create an instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.EventTextFormatterElement.CanCreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance [can create sink] the specified element.
+            </summary>
+            <param name="element">The element.</param>
+            <returns>
+              <c>true</c> if this instance [can create sink] the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.EventTextFormatterElement.CreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> instance.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The formatter instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.FormatterElementFactory">
+            <summary>
+            Creates formatter instances from configuration.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Configuration.FormatterElementFactory.Get(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the specified formatter name.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>The formatter instance.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.JsonEventTextFormatterElement">
+            <summary>
+            Represents a configuration element that can create an instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.JsonEventTextFormatterElement.CanCreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance [can create sink] the specified element.
+            </summary>
+            <param name="element">The element.</param>
+            <returns>
+              <c>true</c> if this instance [can create sink] the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.JsonEventTextFormatterElement.CreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> instance.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The formatter instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.XmlEventTextFormatterElement">
+            <summary>
+            Represents a configuration element that can create an instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.XmlEventTextFormatterElement.CanCreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Determines whether this instance [can create sink] the specified element.
+            </summary>
+            <param name="element">The element.</param>
+            <returns>
+              <c>true</c> if this instance [can create sink] the specified element; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Etw.Configuration.XmlEventTextFormatterElement.CreateFormatter(System.Xml.Linq.XElement)">
+            <summary>
+            Creates the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> instance.
+            </summary>
+            <param name="element">The configuration element.</param>
+            <returns>
+            The formatter instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ConsoleLog">
+            <summary>
+            Factories and helpers for using the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ConsoleLog.LogToConsole(System.IObservable{Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry},Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper)">
+            <summary>
+            Subscribes to an <see cref="T:System.IObservable`1"/> using a <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink"/>.
+            </summary>
+            <param name="eventStream">The event stream. Typically this is an instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener"/>.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="colorMapper">The color mapper instance.</param>
+            <returns>A subscription to the sink that can be disposed to unsubscribe the sink, or to get access to the sink instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ConsoleLog.CreateListener(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper)">
+            <summary>
+            Creates an event listener that logs using a <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink"/>.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="colorMapper">The color mapper instance.</param>
+            <returns>An event listener that uses <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink"/> to display events.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventListenerExtensions">
+            <summary>
+            Extension methods to enable and disable events based on <see cref="T:System.Diagnostics.Tracing.EventSource"/> names rather than actual instances.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventListenerExtensions.DisableEvents(System.Diagnostics.Tracing.EventListener,System.String)">
+            <summary>
+            Disables all events for the specified event source.
+            </summary>
+            <param name="eventListener">The event listener.</param>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventListenerExtensions.EnableEvents(System.Diagnostics.Tracing.EventListener,System.String,System.Diagnostics.Tracing.EventLevel)">
+            <summary>
+            Enables events for the event source with the specified name that have the specified verbosity level or lower.
+            </summary>
+            <param name="eventListener">The event listener.</param>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventListenerExtensions.EnableEvents(System.Diagnostics.Tracing.EventListener,System.String,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords)">
+            <summary>
+            Enables events for the specified event source that has the specified verbosity level or lower, and matching keyword flags.
+            </summary>
+            <param name="eventListener">The event listener.</param>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <param name="matchAnyKeyword">The keyword flags necessary to enable the events.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventListenerExtensions.EnableEvents(System.Diagnostics.Tracing.EventListener,System.String,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Enables events for the specified event source that has the specified verbosity level or lower, and matching keyword flags.
+            </summary>
+            <param name="eventListener">The event listener.</param>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <param name="matchAnyKeyword">The keyword flags necessary to enable the events.</param>
+            <param name="arguments">The arguments to be matched to enable the events.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_BufferedEventPublisherCapacityOverloaded">
+            <summary>
+              Looks up a localized string similar to The buffering capacity of {0} events for the sink {1} has been reached. New entries will be discarded..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_BufferedEventPublisherCapacityRestored">
+            <summary>
+              Looks up a localized string similar to The buffering capacity for the sink {0} was restored..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_BufferedEventPublisherEventsLostWhileDisposing">
+            <summary>
+              Looks up a localized string similar to {0} events could not be sent to the sink {1} and will be lost..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_BufferedEventPublisherUnobservedTaskFault">
+            <summary>
+              Looks up a localized string similar to An unobserved fault was detected in the sink {0}. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_ConsoleSinkWriteFailed">
+            <summary>
+              Looks up a localized string similar to The console sink failed to write an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_CustomFormatterUnhandledFault">
+            <summary>
+              Looks up a localized string similar to Unhandled fault in a custom formatter. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_CustomSinkUnhandledFault">
+            <summary>
+              Looks up a localized string similar to Unhandled fault in a custom sink. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_DatabaseSinkPublishEventsFailed">
+            <summary>
+              Looks up a localized string similar to A database sink failed to publish events. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_DatabaseSinkPublishEventsFailedAndDiscardsEntries">
+            <summary>
+              Looks up a localized string similar to A database sink discarded {0} events due to failures while attempting to publish a batch..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_DatabaseSinkPublishEventsFailedAndDiscardSingleEntry">
+            <summary>
+              Looks up a localized string similar to A database sink discarded an event with index {1} due to a failure while attempting to publish a batch. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_DatabaseSinkPublishEventsTransientError">
+            <summary>
+              Looks up a localized string similar to A transient fault occurred in a database sink. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_EventEntryJsonWriterFailed">
+            <summary>
+              Looks up a localized string similar to The JSON writer failed to handle an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_EventEntrySerializePayloadFailed">
+            <summary>
+              Looks up a localized string similar to The payload for an event could not be serialized. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_EventEntryTextWriterFailed">
+            <summary>
+              Looks up a localized string similar to The text formatter failed to format an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_EventEntryXmlWriterFailed">
+            <summary>
+              Looks up a localized string similar to The XML formatter failed to format an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_FlatFileSinkWriteFailed">
+            <summary>
+              Looks up a localized string similar to A flat file sink failed to write an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_FormatEntryAsStringFailed">
+            <summary>
+              Looks up a localized string similar to Formatting an entry failed. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_MapEntryLevelToColorFailed">
+            <summary>
+              Looks up a localized string similar to Mapping the event level {0} to a color failed. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_ParsingEventSourceManifestFailed">
+            <summary>
+              Looks up a localized string similar to Parsing the manifest for provider &apos;{0}&apos; to handle the event with ID {1} failed. Message: {2}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_RollingFlatFileSinkWriteFailed">
+            <summary>
+              Looks up a localized string similar to A rolling flat file sink failed to write an event. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceConfigurationChanged">
+            <summary>
+              Looks up a localized string similar to The configuration changed for the element &apos;{0}&apos;. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceConfigurationFault">
+            <summary>
+              Looks up a localized string similar to A fault was detected while processing the configuration for the element &apos;{0}&apos;. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceConfigurationFileLoadFault">
+            <summary>
+              Looks up a localized string similar to A fault was detected while loading the configuration file. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceConfigurationShutdownFault">
+            <summary>
+              Looks up a localized string similar to A fault was detected while shutting down the configured listeners. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceConfigurationWithFaults">
+            <summary>
+              Looks up a localized string similar to The configuration was partially successfully loaded. Check logs for further error details..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceEventsWillBeLost">
+            <summary>
+              Looks up a localized string similar to Some events will be lost because of buffer overruns or schema synchronization delays in trace session: {0}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceManifestGenerationFault">
+            <summary>
+              Looks up a localized string similar to An improperly generated manifest was received for provider {0}. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceProcessEventsLost">
+            <summary>
+              Looks up a localized string similar to The loss of {1} events was detected in trace session &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceProcessTaskFault">
+            <summary>
+              Looks up a localized string similar to An unhandled fault was detected in the processing task for the trace session &apos;{0}&apos;. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceSessionRemoved">
+            <summary>
+              Looks up a localized string similar to The trace session with the name &apos;{0}&apos; was removed..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_TraceEventServiceSinkUnhandledFault">
+            <summary>
+              Looks up a localized string similar to An unhandled exception occurred for the trace session &apos;{0}&apos;. Message: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_WindowsAzureTableSinkEntityCreationFailed">
+            <summary>
+              Looks up a localized string similar to A Windows Azure Table sink failed to create an entity. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_WindowsAzureTableSinkPublishEventsFailed">
+            <summary>
+              Looks up a localized string similar to A Windows Azure Table sink failed to write a batch of events. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_WindowsAzureTableSinkPublishEventsFailedAndDiscardsEntries">
+            <summary>
+              Looks up a localized string similar to A Windows Azure Table sink discarded {0} events due to failures while attempting to publish a batch..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_WindowsAzureTableSinkTableCreationFailed">
+            <summary>
+              Looks up a localized string similar to A Windows Azure Table sink failed to create a table. Message: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSourceResources.event_WindowsAzureTableSinkTransientError">
+            <summary>
+              Looks up a localized string similar to A transient fault occurred in a Windows Azure Table sink. Message: {0}.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink">
+            <summary>
+            A sink that writes to the Console.
+            </summary>
+            <remarks>This class is thread-safe.</remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink.#ctor(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink.OnCompleted">
+            <summary>
+            Notifies the observer that the provider has finished sending push-based notifications.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink.OnError(System.Exception)">
+            <summary>
+            Notifies the observer that the provider has experienced an error condition.
+            </summary>
+            <param name="error">An object that provides additional information about the error.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.ConsoleSink.OnNext(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry)">
+            <summary>
+            Provides the sink with new data to write.
+            </summary>
+            <param name="value">The current entry and its color to write to the console.</param>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException">
+            <summary>
+            Represents an error while doing a flush operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException"/> class.</summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException"/> class.</summary>
+            <param name="message">The exception message.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException.#ctor(System.Exception)">
+            <summary>Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException"/> class.</summary>
+            <param name="innerException">The references to the inner exception that is the cause of this exception.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException"/> class.</summary>
+            <param name="message">The exception message.</param>
+            <param name="innerException">The references to the inner exception that is the cause of this exception.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks.FlushFailedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Initializes a new instance of the System.Exception class with serialized data.</summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper">
+            <summary>
+            Default console color mapper class.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper">
+            <summary>
+            Provides mapping between an <see cref="T:System.Diagnostics.Tracing.EventLevel"/> and a console foreground color.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper.Map(System.Diagnostics.Tracing.EventLevel)">
+            <summary>
+            Maps the specified <see cref="T:System.Diagnostics.Tracing.EventLevel"/> to a <see cref="T:System.ConsoleColor"/>
+            </summary>
+            <param name="eventLevel">The <see cref="T:System.Diagnostics.Tracing.EventLevel"/>.</param>
+            <returns>The <see cref="T:System.ConsoleColor"/>.</returns>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.LogAlways">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.LogAlways"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Critical">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.Critical"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Error">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.Error"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Warning">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.Warning"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Verbose">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.Verbose"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Informational">
+            <summary>
+            Default color value for when displaying events of level <see cref="F:System.Diagnostics.Tracing.EventLevel.Informational"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.DefaultConsoleColorMapper.Map(System.Diagnostics.Tracing.EventLevel)">
+            <summary>
+            Maps the specified <see cref="T:System.Diagnostics.Tracing.EventLevel"/> to a <see cref="T:System.ConsoleColor"/>.
+            </summary>
+            <param name="eventLevel">The event level.</param>
+            <returns>The console color.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener">
+            <summary>
+            An <see cref="T:System.Diagnostics.Tracing.EventListener"/> that can be observed.
+            </summary>
+            <remarks>
+            This class is thread-safe.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.Dispose">
+            <summary>
+            Releases all resources used by the current instance and unsubscribes all the observers.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.DisableEvents(System.String)">
+            <summary>
+            Disables all events for the specified event source.
+            </summary>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.EnableEvents(System.String,System.Diagnostics.Tracing.EventLevel)">
+            <summary>
+            Enables events for the event source with the specified name that have the specified verbosity level or lower.
+            </summary>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.EnableEvents(System.String,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords)">
+            <summary>
+            Enables events for the specified event source that has the specified verbosity level or lower, and matching keyword flags.
+            </summary>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <param name="matchAnyKeyword">The keyword flags necessary to enable the events.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.EnableEvents(System.String,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventKeywords,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Enables events for the specified event source that has the specified verbosity level or lower, and matching keyword flags.
+            </summary>
+            <param name="eventSourceName">The name of the event source to enable events for.</param>
+            <param name="level">The level of events to enable.</param>
+            <param name="matchAnyKeyword">The keyword flags necessary to enable the events.</param>
+            <param name="arguments">The arguments to be matched to enable the events.</param>
+            <returns>
+              <see langword="false" /> if the request was deferred; otherwise, <see langword="true" />.
+            </returns>
+            <remarks>
+            If the event source with the supplied name has already been created the request is processed immediately. Otherwise the request
+            is deferred until the event source is created.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.Subscribe(System.IObserver{Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry})">
+            <summary>
+            Notifies the provider that an observer is to receive notifications.
+            </summary>
+            <param name="observer">The object that is to receive notifications.</param>
+            <returns>A reference to an interface that allows observers to stop receiving notifications
+            before the provider has finished sending them.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.OnEventWritten(System.Diagnostics.Tracing.EventWrittenEventArgs)">
+            <summary>
+            Called whenever an event has been written by an event source for which the event listener has enabled events.
+            </summary>
+            <param name="eventData">The event arguments that describe the event.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.ObservableEventListener.OnEventSourceCreated(System.Diagnostics.Tracing.EventSource)">
+            <summary>
+            Called for all existing event sources when the event listener is created and when a new event source is attached to the listener.
+            </summary>
+            <param name="eventSource">The event source.</param>
+            <remarks>
+            The listener processes any deferred enable events requests associated to the <paramref name="eventSource"/>.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription">
+            <summary>
+            This map or container class holds a reference to an instance of a logging sink
+            and a subscription token to an IObservable{EventEntry}, both of which will be disposed by this container
+            if the container itself is explicitly disposed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.#ctor(System.IDisposable,System.Object)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription"/>.
+            It holds references to a logging sink an a subscription, both
+            of which will be disposed by this container if the container itself is explicitly disposed.
+            </summary>
+            <param name="subscription">The subscription that is used to connect to an <see cref="T:System.IObservable`1"/>.</param>
+            <param name="sink">The logging sink.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Dispose">
+            <summary>
+            Disposes both the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Subscription"/> and the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Sink"/> if it implements <see cref="T:System.IDisposable"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Dispose(System.Boolean)">
+            <summary>
+            Disposes both the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Subscription"/> and the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Sink"/> if it implements <see cref="T:System.IDisposable"/>
+            </summary>
+            <param name="disposing">True if explicitly disposing the instance.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Subscription">
+            <summary>
+            A reference to the underlying subscription token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription.Sink">
+            <summary>
+            A reference to the underlying log sink.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription`1">
+            <summary>
+            This map or container class holds a reference to an instance of a logging sink
+            and a subscription token to an IObservable{EventEntry}, both of which will be disposed by this container
+            when the container itself is disposed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription`1.#ctor(System.IDisposable,`0)">
+            <summary>
+            Initializes a new instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription"/>.
+            It holds references to a logging sink an a subscription, both
+            of which will be disposed by this container when the container itself is disposed.
+            </summary>
+            <param name="subscription">The subscription that is used to connect to an <see cref="T:System.IObservable`1"/>.</param>
+            <param name="sink">The logging sink.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SinkSubscription`1.Sink">
+            <summary>
+            A reference to the underlying log sink.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject">
+            <summary>
+            A subject that can be observed and publish events.
+            </summary>    
+            <remarks>
+            This is a very basic implementation of a subject to avoid references to Rx when the
+            end user might not want to do advanced filtering and projection of event streams.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject.Dispose">
+            <summary>
+            Releases all resources used by the current instance and unsubscribes all the observers.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject.Subscribe(System.IObserver{Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry})">
+            <summary>
+            Notifies the provider that an observer is to receive notifications.
+            </summary>
+            <param name="observer">The object that is to receive notifications.</param>
+            <returns>A reference to an interface that allows observers to stop receiving notifications
+            before the provider has finished sending them.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject.OnCompleted">
+            <summary>
+            Notifies the observer that the provider has finished sending push-based notifications.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject.OnError(System.Exception)">
+            <summary>
+            Notifies the observer that the provider has experienced an error condition.
+            </summary>
+            <param name="error">An object that provides additional information about the error.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.EventEntrySubject.OnNext(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry)">
+            <summary>
+            Provides the observers with new data.
+            </summary>
+            <param name="value">The current notification information.</param>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1">
+            <summary>
+            Buffering and batching utility for sinks that can benefit from batched writes
+            </summary>
+            <typeparam name="TEntry">The type of the entry to buffer.</typeparam>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.#ctor(System.String,System.Func{System.Collections.Generic.IList{`0},System.Threading.Tasks.Task{System.Int32}},System.TimeSpan,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1"/> class.
+            </summary>
+            <param name="sinkId">An identifier for the sink.</param>
+            <param name="eventPublisher">The event publisher.</param>
+            <param name="bufferingInterval">The buffering interval.</param>
+            <param name="bufferingCount">The buffering count.</param>
+            <param name="maxBufferSize">The maximum number of entries that can be buffered before the sink starts dropping entries.</param>
+            <param name="cancellationToken">Cancels any pending operation.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">BufferingCount out of range.</exception>
+            <exception cref="T:System.ArgumentException">Argument valdation error.</exception>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.CreateAndStart(System.String,System.Func{System.Collections.Generic.IList{`0},System.Threading.Tasks.Task{System.Int32}},System.TimeSpan,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Initializes and starts a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1"/> class.
+            </summary>
+            <param name="sinkId">An identifier for the sink.</param>
+            <param name="eventPublisher">The event publisher.</param>
+            <param name="bufferingInterval">The buffering interval.</param>
+            <param name="bufferingCount">The buffering count.</param>
+            <param name="maxBufferSize">The maximum number of entries that can be buffered before the sink starts dropping entries.</param>
+            <param name="cancellationToken">Cancels any pending operation.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">BufferingCount out of range.</exception>
+            <exception cref="T:System.ArgumentException">Argument valdation error.</exception>
+            <returns>An instance of BufferedEventPublisher{TEntry}.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.TryPost(`0)">
+            <summary>
+            Tries posting the specified entry.
+            </summary>
+            <param name="entry">The entry.</param>
+            <returns>True on successful post, false otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.FlushAsync">
+            <summary>
+            Flushes all the buffered entries.
+            </summary>
+            <returns>The task to wait for flush completion.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.SetAsFlushed">
+            <summary>
+            If there are consumers waiting for the flush operation to finish, it completes the operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.BufferedEventPublisher`1.WaitForIntervalAsync(System.TimeSpan)">
+            <summary>
+            Waits for the polling interval or until a flush operation occurs.
+            </summary>
+            <param name="interval">The interval to wait.</param>
+            <returns>Returns a task that will run completion when the time expires, and will reset the flush cancellation token.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry">
+            <summary>
+            Represents a entry to log, with additional context information.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.DefaultDateTimeFormat">
+            <summary>
+            The default date time format for a formatter date values. 
+            Default as Round-trip value; "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffzzz".
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.#ctor(System.Guid,System.Int32,System.String,System.Collections.ObjectModel.ReadOnlyCollection{System.Object},System.DateTimeOffset,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> class.
+            </summary>
+            <param name="sourceId">The source id.</param>
+            <param name="eventId">The event id.</param>
+            <param name="formattedMessage">The message.</param>
+            <param name="payload">The payload.</param>
+            <param name="timestamp">The timestamp.</param>
+            <param name="schema">The schema.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.#ctor(System.Guid,System.Int32,System.String,System.Collections.ObjectModel.ReadOnlyCollection{System.Object},System.DateTimeOffset,System.Guid,System.Guid,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> class.
+            </summary>
+            <param name="sourceId">The source id.</param>
+            <param name="eventId">The event id.</param>
+            <param name="formattedMessage">The message.</param>
+            <param name="payload">The payload.</param>
+            <param name="timestamp">The timestamp.</param>
+            <param name="activityId">The activity id.</param>
+            <param name="relatedActivityId">The related activity id.</param>
+            <param name="schema">The schema.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.#ctor(System.Guid,System.Int32,System.String,System.Collections.ObjectModel.ReadOnlyCollection{System.Object},System.DateTimeOffset,System.Int32,System.Int32,System.Guid,System.Guid,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> class.
+            </summary>
+            <param name="sourceId">The source id.</param>
+            <param name="eventId">The event id.</param>
+            <param name="formattedMessage">The message.</param>
+            <param name="payload">The payload.</param>
+            <param name="timestamp">The timestamp.</param>
+            <param name="processId">The process id.</param>
+            <param name="threadId">The thread id.</param>
+            <param name="activityId">The activity id.</param>
+            <param name="relatedActivityId">The related activity id.</param>
+            <param name="schema">The schema.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.Create(System.Diagnostics.Tracing.EventWrittenEventArgs,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema)">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> instance based on the <paramref name="args"/> and the <paramref name="schema"/>.
+            </summary>
+            <param name="args">The <see cref="T:System.Diagnostics.Tracing.EventWrittenEventArgs"/> representing the event to log.</param>
+            <param name="schema">The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema"/> for the source originating the event.</param>
+            <returns>An entry describing the event.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.GetFormattedTimestamp(System.String)">
+            <summary>
+            Gets the formatted timestamp.
+            </summary>
+            <param name="format">The format.</param>
+            <returns>The formatted string.</returns>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.ProviderId">
+            <summary>
+            Gets the id of the source originating the event.
+            </summary>
+            <value>The provider id.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.EventId">
+            <summary>
+            Gets the event id.
+            </summary>
+            <value>The event id.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.Payload">
+            <summary>
+            Gets the event payload.
+            </summary>
+            <value>The event payload.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.Timestamp">
+            <summary>
+            Gets the timestamp of the event.
+            </summary>
+            <value>The timestamp of the event.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.Schema">
+            <summary>
+            Gets the event schema.
+            </summary>
+            <value>The event schema.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.FormattedMessage">
+            <summary>
+            Gets the formatted message.
+            </summary>
+            <value>
+            The formatted message.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.ProcessId">
+            <summary>
+            Gets the process id.
+            </summary>
+            <value>
+            The process id.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.ThreadId">
+            <summary>
+            Gets the thread id.
+            </summary>
+            <value>
+            The thread id.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.ActivityId">
+            <summary>
+            Gets the activity id.
+            </summary>
+            <value>
+            The activity id.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry.RelatedActivityId">
+            <summary>
+            Gets the related activity id.
+            </summary>
+            <value>
+            The related activity id.
+            </value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter">
+            <summary>
+            A <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> implementation that writes out text formatted as XML compliant with the 
+            <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa385201(v=vs.85).aspx">Event Schema</a>.
+            </summary>
+            <remarks>This class is not thread-safe.</remarks>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter">
+            <summary>
+            Provides a generic interface for an event text formatter used 
+            whenever an event has been written by an event source for which the event listener has enabled events.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter.WriteEvent(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,System.IO.TextWriter)">
+            <summary>
+            Writes the event.
+            </summary>
+            <param name="eventEntry">The event entry.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter.DefaultEventTextFormatting">
+            <summary>
+            The default event text formatting.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter.#ctor(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter"/> class.
+            </summary>
+            <param name="formatting">The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/> formatting.</param>
+            <param name="dateTimeFormat">The date time format used for timestamp value.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter.WriteEvent(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,System.IO.TextWriter)">
+            <summary>
+            Writes the event.
+            </summary>
+            <param name="eventEntry">The <see cref="T:System.Diagnostics.Tracing.EventWrittenEventArgs"/> instance containing the event data.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter.DateTimeFormat">
+            <summary>
+            Gets or sets the date time format used for timestamp value.
+            </summary>
+            <value>
+            The date time format.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.XmlEventTextFormatter.Formatting">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/>.
+            </summary>
+            <value>The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/>.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Keywords">
+            <summary>
+            EventKeywords additional constants for <see cref="T:System.Diagnostics.Tracing.EventKeywords"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Keywords.All">
+            <summary>
+            Keyword flags to enable all the events. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter">
+            <summary>
+            A <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> implementation that writes out text formatted as JSON.
+            </summary>
+            <remarks>This class is not thread-safe.</remarks>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.DefaultEventTextFormatting">
+            <summary>
+            The default event text formatting.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.#ctor(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter"/> class.
+            </summary>
+            <param name="formatting">The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/> formatting.</param>
+            <param name="dateTimeFormat">The date time format used for timestamp value.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.WriteEvent(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,System.IO.TextWriter)">
+            <summary>
+            Write the formatted event output.
+            </summary>
+            <param name="eventEntry">The event data to be formatted.</param>
+            <param name="writer">The writer to receive the formatted output.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.DateTimeFormat">
+            <summary>
+            Gets or sets the date time format used for timestamp value.
+            </summary>
+            <value>
+            The date time format.
+            </value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.IncludeEntrySeparator">
+            <summary>
+            Gets or sets a flag indicating whether the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter"/> will append a separator (",") at the end of each event
+            </summary>
+            <value>The flag indicating whether to append a separator.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.JsonEventTextFormatter.Formatting">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/>.
+            </summary>
+            <value>The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting"/>.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting">
+            <summary>
+            Specifies formatting options .
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting.None">
+            <summary>
+            No special formatting applied. This is the default.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatting.Indented">
+            <summary>
+            Causes child objects to be indented.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema">
+            <summary>
+            Represents an <see cref="T:System.Diagnostics.Tracing.EventSource"/> schema.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.#ctor(System.Int32,System.Guid,System.String,System.Diagnostics.Tracing.EventLevel,System.Diagnostics.Tracing.EventTask,System.String,System.Diagnostics.Tracing.EventOpcode,System.String,System.Diagnostics.Tracing.EventKeywords,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema"/> class with the specified values.
+            </summary>
+            <param name="id">The event id.</param>
+            <param name="providerId">The provider GUID.</param>
+            <param name="providerName">The provider name.</param>
+            <param name="level">The event level.</param>
+            <param name="task">The event task.</param>
+            <param name="taskName">The event task name.</param>
+            <param name="opcode">The event operation code.</param>
+            <param name="opcodeName">The event operation code name.</param>
+            <param name="keywords">The event keywords.</param>
+            <param name="keywordsDescription">The event keywords description.</param>
+            <param name="version">The event version.</param>
+            <param name="payload">The event payload.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Id">
+            <summary>
+            Gets the event ID.
+            </summary>
+            <value>The event ID.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.ProviderId">
+            <summary>
+            Gets the provider id.
+            </summary>        
+            <remarks>
+            Provider GUID can be <see cref="F:System.Guid.Empty"/> for pre-Vista ETW providers.  
+            </remarks>
+            <value>The provider id.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.ProviderName">
+            <summary>
+            Gets the provider name.
+            </summary>
+            <value>The provider name.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Task">
+            <summary>
+            Gets the event task.
+            </summary>
+            <remarks>
+            Events for a given provider can be given a group identifier called a Task that indicates the
+            broad area within the provider that the event pertains to (for example the Kernel provider has
+            Tasks for Process, Threads, etc). 
+            </remarks>
+            <value>The event task.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.TaskName">
+            <summary>
+            Gets the task name.
+            </summary>
+            <value>The task name.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Payload">
+            <summary>
+            Gets the payload names that maps to the event signature parameter names.
+            </summary>
+            <value>The event payload.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Opcode">
+            <summary>
+            Gets the operation code.
+            </summary>
+            <remarks>
+            Each event has a Type identifier that indicates what kind of an event is being logged. Note that
+            providers are free to extend this set, so the id may not be just the value in <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Opcode"/>.
+            </remarks>
+            <value>The operation code.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.OpcodeName">
+            <summary>
+            Gets the human-readable string name for the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Opcode"/> property. 
+            </summary>
+            <value>The operation code name.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Level">
+            <summary>
+            Gets the event level.
+            </summary>
+            <value>The event level.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Version">
+            <summary>
+            Gets the event version.
+            </summary>
+            <value>The event version.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Keywords">
+            <summary>
+            Gets the event keywords.
+            </summary>
+            <value>The event keywords.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.KeywordsDescription">
+            <summary>
+            Gets the human-readable string name for the <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.Keywords"/> property. 
+            </summary>
+            <value>The keyword description.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema.EventName">
+            <summary>
+            Gets the name for the event.
+            </summary>
+            <remarks>
+            This is simply the concatenation of the task and operation code names.
+            </remarks>
+            <value>The event name.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource">
+            <summary>
+            An <see cref="T:System.Diagnostics.Tracing.EventSource"/> class to notify non-transient faults and internal trace information.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.CustomSinkUnhandledFault(System.String)">
+            <summary>
+            Trace event that may be used for logging any unhandled exception that occurs in a custom sink.
+            </summary>
+            <param name="message">The exception message.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.CustomFormatterUnhandledFault(System.String)">
+            <summary>
+            Trace event that may be used for logging any unhandled exception that occurs in a custom formatter.
+            </summary>
+            <param name="message">The exception message.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.Log">
+            <summary>
+            Gets the singleton instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource"/>.
+            </summary>
+            <value>The singleton instance.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.Keywords">
+            <summary>
+            Custom defined event keywords.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.Keywords.Sink">
+            <summary>
+            Keyword for sink.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.Keywords.Formatting">
+            <summary>
+            Keyword for formatting.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.SemanticLoggingEventSource.Keywords.TraceEvent">
+            <summary>
+            Keyword for trace event.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ArgumentIsEmptyError">
+            <summary>
+              Looks up a localized string similar to Argument is empty.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ArgumentMustBeObservableEventListener">
+            <summary>
+              Looks up a localized string similar to The argument must be an instance of ObservableEventListener..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ArgumentNotGreaterOrEqualTo">
+            <summary>
+              Looks up a localized string similar to The size of &apos;{0}&apos; should be greater or equal to &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ArgumentNotLowerOrEqualTo">
+            <summary>
+              Looks up a localized string similar to The size of &apos;{0}&apos; should be lower or equal to &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerBadFormedManifestError">
+            <summary>
+              Looks up a localized string similar to An event type argument could not be properly serialized into an event source manifest. Verify any use of Enums whose base type is other than Int32 or Int64 and replace it with any of these allowed types. For more infromation about issues using Enums read: http://connect.microsoft.com/VisualStudio/feedback/details/785409/eventsource-manifest-generation-creates-wrong-map-values-for-enum-types-other-than-int32-or-int64.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerDifferentParameterCount">
+            <summary>
+              Looks up a localized string similar to The number of WriteEvent arguments and event parameters are different in event name &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerManifestGenerationError">
+             <summary>
+               Looks up a localized string similar to EventSource manifest generation failure.
+            {0}
+            Manifest:
+            {1}.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerMethodCallError">
+            <summary>
+              Looks up a localized string similar to A call to method &apos;{0}&apos; threw an exception..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerMismatchParametersOrder">
+            <summary>
+              Looks up a localized string similar to The parameter name &apos;{0}&apos; defined in the event &apos;{1}&apos; does not match the order in WriteEvent function..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerMismatchParametersType">
+            <summary>
+              Looks up a localized string similar to The parameter name &apos;{0}&apos; with type &apos;{1}&apos; does not match the payload type &apos;{2}&apos; in method &apos;{3}&apos;. Check the parameter type in WriteEvent and assign a type that matches the same event arguement type . .
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerMissingWriteEventCallError">
+            <summary>
+              Looks up a localized string similar to Event method &apos;{0}&apos; does not call WriteEvent() or the call is bypassed due to incorrect filtering before the WriteEvent call..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerNoEventsError">
+            <summary>
+              Looks up a localized string similar to The specified EventSource does not have any method decorated with EventAttribute..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.EventSourceAnalyzerNullPayloadValue">
+            <summary>
+              Looks up a localized string similar to The payload argument in position &apos;{0}&apos; is sending a null value which may not map to the parameter &apos;{1}&apos; in event &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.ExceptionReadEnvironmentVariablesDenied">
+            <summary>
+              Looks up a localized string similar to Environment Variables access denied..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.FlushFailedException">
+            <summary>
+              Looks up a localized string similar to An error occurred while flushing the event entries..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.FormatterElementNotResolvedError">
+            <summary>
+              Looks up a localized string similar to Could not created the formatter specified in configuration element name &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.IncompleteArgumentsError">
+            <summary>
+              Looks up a localized string similar to The parameters specified in this element does not map to an existing type member. All paramters are required in the same order of the defined type member. .
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.InvalidBufferingArguments">
+            <summary>
+              Looks up a localized string similar to Invalid arguments combination for buffering interval and count. Please specify valid range values for count and interval parameters..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.InvalidConnectionStringError">
+            <summary>
+              Looks up a localized string similar to The value does not represent a connection string.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.InvalidDateTimeFormatError">
+            <summary>
+              Looks up a localized string similar to The date time format is invalid..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.InvalidNavigationPathInFileNameError">
+            <summary>
+              Looks up a localized string similar to A file name with a relative path is not allowed. Provide only the file name or the full path of the file..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.InvalidNavigationPathInReplacedFileNameError">
+            <summary>
+              Looks up a localized string similar to A file name with a relative path after replacing environment variables is not allowed. Provide only the file name or the full path of the file..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.JsonSerializationError">
+            <summary>
+              Looks up a localized string similar to Cannot serialize to JSON format the payload: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.MaxBufferSizeShouldBeLargerThanBufferingCount">
+            <summary>
+              Looks up a localized string similar to The maxBufferSize argument has to be at least 3 times larger than the bufferingCount argument. Current values are maxBufferSize={0} and bufferingCount={1}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.TextSerializationError">
+            <summary>
+              Looks up a localized string similar to Cannot serialize the payload: {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.TimeSpanOutOfRangeError">
+            <summary>
+              Looks up a localized string similar to The valid range for &apos;{0}&apos; is from 0 to 24.20:31:23.647.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Properties.Resources.XmlSerializationError">
+            <summary>
+              Looks up a localized string similar to Cannot serialize to XML format the payload: {0}.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaCache">
+            <summary>
+            Used for caching <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaCache.GetSchema(System.Int32,System.Diagnostics.Tracing.EventSource)">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSchema"/> for the specified eventId and eventSource.
+            </summary>
+            <param name="eventId">The ID of the event.</param>
+            <param name="eventSource">The event source.</param>
+            <returns>The EventSchema.</returns>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaCache.Instance">
+            <summary>
+            Gets the singleton instance of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaCache"/>.
+            </summary>
+            <value>The instance of EventSourceSchemaCache.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaReader">
+            <summary>
+            Parses the ETW manifest generated by the <see cref="T:System.Diagnostics.Tracing.EventSource"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Schema.EventSourceSchemaReader.GetSchema(System.Diagnostics.Tracing.EventSource)">
+            <summary>
+            Gets the schema for the specified event source.
+            </summary>
+            <param name="eventSource">The event source.</param>
+            <returns>The event schema.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter">
+            <summary>
+            A <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> implementation that writes out formatted text.
+            </summary>
+            <remarks>This class is not thread-safe.</remarks>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.DashSeparator">
+            <summary>
+            The dash separator.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.DefaultVerbosityThreshold">
+            <summary>
+            The default <see cref="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.VerbosityThreshold"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.#ctor(System.String,System.String,System.Diagnostics.Tracing.EventLevel,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter"/> class.
+            </summary>
+            <param name="header">The header.</param>
+            <param name="footer">The footer.</param>
+            <param name="verbosityThreshold">The verbosity threshold.</param>
+            <param name="dateTimeFormat">The date time format used for timestamp value.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.WriteEvent(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,System.IO.TextWriter)">
+            <summary>
+            Writes the event.
+            </summary>
+            <param name="eventEntry">The <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> instance containing the event data.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.Header">
+            <summary>
+            Gets or sets the header.
+            </summary>
+            <value>The header of the text formatter.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.Footer">
+            <summary>
+            Gets or sets the footer.
+            </summary>
+            <value>The footer of the text formatter.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.VerbosityThreshold">
+            <summary>
+            Gets or sets the lowest <see cref="T:System.Diagnostics.Tracing.EventLevel"/> value where the formatted output provides all the event entry information.
+            Otherwise a summarized content of the event entry will be written.
+            </summary>
+            <value>The EventLevel.</value>
+        </member>
+        <member name="P:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.EventTextFormatter.DateTimeFormat">
+            <summary>
+            Gets or sets the date time format used for timestamp value.
+            </summary>
+            <value>The date time format value.</value>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Buffering">
+            <summary>
+            Buffering constants.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Buffering.DefaultBufferingCount">
+            <summary>
+            The default buffering count.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Buffering.DefaultMaxBufferSize">
+            <summary>
+            The maximum number of entries that can be buffered while it's sending to database before the sink starts dropping entries.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Buffering.DefaultBufferingInterval">
+            <summary>
+            The default buffering interval.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventEntryExtensions">
+            <summary>
+            Extensions for <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventEntryExtensions.SubscribeWithFormatter(System.IObservable{Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry},Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,System.IObserver{System.String})">
+            <summary>
+            Subscribes an <see cref="T:System.IObserver`1"/> sink by doing a straight projection of a sequence of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> and applying
+            a format using a <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> instance to convert it to a <see cref="T:System.String"/> message.
+            </summary>
+            <param name="source">The original stream of events.</param>
+            <param name="formatter">The formatter to use.</param>
+            <param name="sink">The underlying sink.</param>
+            <returns>A subscription token to unsubscribe to the event stream.</returns>
+            <remarks>When using Reactive Extensions (Rx), this is equivalent to doing a Select statement on the <paramref name="source"/> to convert it to <see cref="T:System.IObservable`1"/> and then
+            calling Subscribe on it.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventEntryExtensions.SubscribeWithFormatterAndColor(System.IObservable{Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry},Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper,System.IObserver{System.Tuple{System.String,System.Nullable{System.ConsoleColor}}})">
+            <summary>
+            Subscribes a sink by doing a straight projection of a sequence of <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> and applying
+            a format using a <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/> and a <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper"/> instances to convert it 
+            to a sequence of entries for that sink.
+            </summary>
+            <param name="source">The original stream of events.</param>
+            <param name="formatter">The formatter to use.</param>
+            <param name="colorMapper">The color mapper.</param>
+            <param name="sink">The underlying sink.</param>
+            <returns>A subscription token to unsubscribe to the event stream.</returns>
+            <remarks>When using Reactive Extensions (Rx), this is equivalent to doing a Select statement on the <paramref name="source"/> to convert it to a <see cref="T:System.Tuple"/> and then
+            calling Subscribe on it.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventEntryExtensions.TryFormatAsString(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter)">
+            <summary>
+            Formats an <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> as a string using an <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/>.
+            </summary>
+            <param name="entry">The entry to format.</param>
+            <param name="formatter">The formatter to use.</param>
+            <returns>A formatted entry, or <see langword="null"/> if an exception is thrown by the <paramref name="formatter"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventEntryExtensions.TryFormatAsStringAndColor(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IConsoleColorMapper)">
+            <summary>
+            Formats an <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry"/> as a string using an <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/>, and
+            assigns a <see cref="T:System.ConsoleColor"/> depending on the event level.
+            </summary>
+            <param name="entry">The entry to format.</param>
+            <param name="formatter">The formatter to use.</param>
+            <param name="colorMapper">The color mapper to user.</param>
+            <returns>A formatted entry with its color, or <see langword="null"/> if an exception is thrown by the <paramref name="formatter"/>.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.ObservableProjection">
+            <summary>
+            Very basic implementation of a projection of IObservable to avoid references to Rx when the
+            end user might not want to do advanced filtering and projection of event streams.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Observable.ObservableProjection.CreateSubscription``2(System.IObservable{``0},System.IObserver{``1},System.Func{``0,``1})">
+            <summary>
+            Creates a subscription to the source, where in every occurrence of the source stream, it transforms the input
+            item using the <paramref name="selector"/> and pushes the result to the <paramref name="observer"/>.
+            </summary>
+            <param name="source">The original source stream.</param>
+            <param name="observer">The observer of the output stream.</param>
+            <param name="selector">The conversion delegate to convert from the original type to the destination.</param>
+            <typeparam name="Tin">The type of the original source stream.</typeparam>
+            <typeparam name="Tout">The type of the observer and output stream.</typeparam>
+            <returns>Returns a subscription token used to unsubscribe to the original source.</returns>
+            <remarks>This method is behaviorally equivalent to doing the following using Rx: source.Select(selector).Subscribe(observer).</remarks>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.FileUtil.ProcessFileNameForLogging(System.String)">
+            <summary>
+            This method will replace environment variables and root the filename to the base directory while ensuring the path exists.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <returns>A FileInfo instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.FileUtil.ValidFile(System.String,System.String,System.Boolean)">
+            <summary>
+            Validate the file name or throws an exception.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="argumentName">Name of argument being checked.</param>
+            <param name="replaced"><see langword="true"/> if the file name is the result of replacing environment variables; otherwise, <see langword="false"/>.</param>
+            <exception cref="T:System.ArgumentException">The file name is invalid.</exception>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventTextFormatterExtensions">
+            <summary>
+            Extensions for <see cref="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.EventTextFormatterExtensions.WriteEvent(Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Formatters.IEventTextFormatter,Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventEntry)">
+            <summary>
+            Formats the event as a string.
+            </summary>
+            <param name="entry">The entry to format.</param>
+            <param name="formatter">The formatter to use.</param>
+            <returns>A formatted entry.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ArgumentNotNull(System.Object,System.String)">
+            <summary>
+            Throws <see cref="T:System.ArgumentNullException"/> if the given argument is null.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"> If tested value if null.</exception>
+            <param name="argumentValue">Argument value to test.</param>
+            <param name="argumentName">Name of the argument being tested.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ArgumentNotNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throws an exception if the tested string argument is null or the empty string.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if string value is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the string is empty</exception>
+            <param name="argumentValue">Argument value to check.</param>
+            <param name="argumentName">Name of argument being checked.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ArgumentGreaterOrEqualThan``1(``0,``0,System.String)">
+            <summary>
+            Throws an exception if the argumentValue is less than lowerValue.
+            </summary>
+            <typeparam name="T">A type that implements <see cref="T:System.IComparable"/>.</typeparam>
+            <param name="lowerValue">The lower value accepted as valid.</param>
+            <param name="argumentValue">The argument value to test.</param>
+            <param name="argumentName">Name of the argument.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Validation error.</exception>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ArgumentLowerOrEqualThan``1(``0,``0,System.String)">
+            <summary>
+            Throws an exception if the argumentValue is great than higherValue.
+            </summary>
+            <typeparam name="T">A type that implements <see cref="T:System.IComparable"/>.</typeparam>
+            <param name="higherValue">The higher value accepted as valid.</param>
+            <param name="argumentValue">The argument value to test.</param>
+            <param name="argumentName">Name of the argument.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Validation error.</exception>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ArgumentIsValidTimeout(System.Nullable{System.TimeSpan},System.String)">
+            <summary>
+            Throws an exception if the tested TimeSpam argument is not a valid timeout value.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the argument is not null and is not a valid timeout value.</exception>
+            <param name="argumentValue">Argument value to check.</param>
+            <param name="argumentName">Name of argument being checked.</param>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.Guard.ValidDateTimeFormat(System.String,System.String)">
+            <summary>
+            Validate the date time format.
+            </summary>
+            <param name="format">The format.</param>
+            <param name="argumentName">Name of the argument.</param>
+        </member>
+        <member name="T:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.XmlExtensions">
+            <summary>
+            Xml extensions for configuration extensibility support
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Utility.XmlExtensions.ToTimeSpan(System.Xml.Linq.XAttribute)">
+            <summary>
+            XAttribute configuration extension to convert seconds to a TimeSpan format
+            </summary>
+            <param name="attribute"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
