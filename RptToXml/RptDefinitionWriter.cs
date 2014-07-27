@@ -8,6 +8,7 @@ using CrystalDecisions.ReportAppServer.ClientDoc;
 using CrystalDecisions.ReportAppServer.Controllers;
 using CrystalDecisions.Shared;
 using CRDataDefModel = CrystalDecisions.ReportAppServer.DataDefModel;
+using CRReportDefModel = CrystalDecisions.ReportAppServer.ReportDefModel;
 
 namespace RptToXml
 {
@@ -520,6 +521,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnablePrintAtBottomOfPage", areaFormat.EnablePrintAtBottomOfPage.ToString());
 			writer.WriteAttributeString("EnableResetPageNumberAfter", areaFormat.EnableResetPageNumberAfter.ToString());
 			writer.WriteAttributeString("EnableSuppress", areaFormat.EnableSuppress.ToString());
+            GetConditionFormulas(areaFormat, writer);
 
 			writer.WriteEndElement();
 		}
@@ -533,6 +535,7 @@ namespace RptToXml
 			writer.WriteAttributeString("LeftLineStyle", border.LeftLineStyle.ToString());
 			writer.WriteAttributeString("RightLineStyle", border.RightLineStyle.ToString());
 			writer.WriteAttributeString("TopLineStyle", border.TopLineStyle.ToString());
+            GetConditionFormulas(border, writer);
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(border.BackgroundColor, writer, "BackgroundColor");
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
@@ -574,7 +577,7 @@ namespace RptToXml
 			writer.WriteAttributeString("SystemFontName", font.SystemFontName);
 			writer.WriteAttributeString("Underline", font.Underline.ToString());
 			writer.WriteAttributeString("Unit", font.Unit.ToString());
-
+            GetConditionFormulas(font, writer);
 			writer.WriteEndElement();
 		}
 
@@ -588,6 +591,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableKeepTogether", objectFormat.EnableKeepTogether.ToString());
 			writer.WriteAttributeString("EnableSuppress", objectFormat.EnableSuppress.ToString());
 			writer.WriteAttributeString("HorizontalAlignment", objectFormat.HorizontalAlignment.ToString());
+            GetConditionFormulas(objectFormat, writer);
 
 			writer.WriteEndElement();
 		}
@@ -605,11 +609,24 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableSuppress", sectionFormat.EnableSuppress.ToString());
 			writer.WriteAttributeString("EnableSuppressIfBlank", sectionFormat.EnableSuppressIfBlank.ToString());
 			writer.WriteAttributeString("EnableUnderlaySection", sectionFormat.EnableUnderlaySection.ToString());
+            GetConditionFormulas(sectionFormat, writer);
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(sectionFormat.BackgroundColor, writer, "BackgroundColor");
 
 			writer.WriteEndElement();
 		}
+        
+        private static void GetConditionFormulas(object o, XmlWriter writer)
+        {
+            WriteAndTraceStartElement(writer, "ConditionFormulas");
+            if (o is SectionFormat)
+            {
+                var sfo = (SectionFormat)o;
+                foreach (var conditionFormula in o. )
+            }
+
+            writer.WriteEndElement();
+        }
 
 		private void GetReportDefinition(ReportDocument report, XmlWriter writer)
 		{
