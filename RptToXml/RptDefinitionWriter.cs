@@ -521,7 +521,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnablePrintAtBottomOfPage", areaFormat.EnablePrintAtBottomOfPage.ToString());
 			writer.WriteAttributeString("EnableResetPageNumberAfter", areaFormat.EnableResetPageNumberAfter.ToString());
 			writer.WriteAttributeString("EnableSuppress", areaFormat.EnableSuppress.ToString());
-            GetConditionFormulas(areaFormat, writer);
+            //GetConditionFormulas(areaFormat, writer);
 
 			writer.WriteEndElement();
 		}
@@ -535,7 +535,7 @@ namespace RptToXml
 			writer.WriteAttributeString("LeftLineStyle", border.LeftLineStyle.ToString());
 			writer.WriteAttributeString("RightLineStyle", border.RightLineStyle.ToString());
 			writer.WriteAttributeString("TopLineStyle", border.TopLineStyle.ToString());
-            GetConditionFormulas(border, writer);
+            //GetConditionFormulas(border, writer);
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(border.BackgroundColor, writer, "BackgroundColor");
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
@@ -577,7 +577,7 @@ namespace RptToXml
 			writer.WriteAttributeString("SystemFontName", font.SystemFontName);
 			writer.WriteAttributeString("Underline", font.Underline.ToString());
 			writer.WriteAttributeString("Unit", font.Unit.ToString());
-            GetConditionFormulas(font, writer);
+//GetConditionFormulas(font, writer);
 			writer.WriteEndElement();
 		}
 
@@ -591,12 +591,12 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableKeepTogether", objectFormat.EnableKeepTogether.ToString());
 			writer.WriteAttributeString("EnableSuppress", objectFormat.EnableSuppress.ToString());
 			writer.WriteAttributeString("HorizontalAlignment", objectFormat.HorizontalAlignment.ToString());
-            GetConditionFormulas(objectFormat, writer);
+//GetConditionFormulas(objectFormat, writer);
 
 			writer.WriteEndElement();
 		}
 
-		private void GetSectionFormat(SectionFormat sectionFormat, XmlWriter writer)
+		private void GetSectionFormat(SectionFormat sectionFormat, ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "SectionFormat");
 
@@ -609,20 +609,23 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableSuppress", sectionFormat.EnableSuppress.ToString());
 			writer.WriteAttributeString("EnableSuppressIfBlank", sectionFormat.EnableSuppressIfBlank.ToString());
 			writer.WriteAttributeString("EnableUnderlaySection", sectionFormat.EnableUnderlaySection.ToString());
-            GetConditionFormulas(sectionFormat, writer);
+            GetConditionFormulas(sectionFormat, report, writer);
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(sectionFormat.BackgroundColor, writer, "BackgroundColor");
 
 			writer.WriteEndElement();
 		}
         
-        private static void GetConditionFormulas(object o, XmlWriter writer)
+        private static void GetConditionFormulas(object o, ReportDocument report, XmlWriter writer)
         {
             WriteAndTraceStartElement(writer, "ConditionFormulas");
             if (o is SectionFormat)
             {
                 var sfo = (SectionFormat)o;
-                foreach (var conditionFormula in o. )
+                foreach (CRReportDefModel.ConditionFormula cfo in CRReportDefModel.SectionAreaFormatConditionFormulas )
+                {
+
+                }
             }
 
             writer.WriteEndElement();
@@ -632,16 +635,16 @@ namespace RptToXml
 		{
 			WriteAndTraceStartElement(writer, "ReportDefinition");
 
-			GetAreas(report.ReportDefinition, writer);
+			GetAreas(report, writer);
 
 			writer.WriteEndElement();
 		}
 
-		private void GetAreas(ReportDefinition reportDefinition, XmlWriter writer)
+		private void GetAreas(ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "Areas");
 
-			foreach (Area area in reportDefinition.Areas)
+			foreach (Area area in report.ReportDefinition.Areas)
 			{
 				WriteAndTraceStartElement(writer, "Area");
 
@@ -651,7 +654,7 @@ namespace RptToXml
 				if ((ShowFormatTypes & FormatTypes.AreaFormat) == FormatTypes.AreaFormat)
 					GetAreaFormat(area.AreaFormat, writer);
 
-				GetSections(area, writer);
+				GetSections(area, report, writer);
 
 				writer.WriteEndElement();
 			}
@@ -659,7 +662,7 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
-		private void GetSections(Area area, XmlWriter writer)
+		private void GetSections(Area area, ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "Sections");
 
@@ -673,7 +676,7 @@ namespace RptToXml
 				writer.WriteAttributeString("Name", section.Name);
 
 				if ((ShowFormatTypes & FormatTypes.SectionFormat) == FormatTypes.SectionFormat)
-					GetSectionFormat(section.SectionFormat, writer);
+					GetSectionFormat(section.SectionFormat, report, writer);
 
 				GetReportObjects(section, writer);
 
