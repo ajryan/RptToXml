@@ -107,7 +107,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableSaveSummariesWithReport", report.ReportOptions.EnableSaveSummariesWithReport.ToString());
 			writer.WriteAttributeString("EnableUseDummyData", report.ReportOptions.EnableUseDummyData.ToString());
 			writer.WriteAttributeString("initialDataContext", report.ReportOptions.InitialDataContext);
-			writer.WriteAttributeString("initialReportPartName", report.ReportOptions.InitialDataContext);
+			writer.WriteAttributeString("initialReportPartName", report.ReportOptions.InitialReportPartName);
 
 			writer.WriteEndElement();
 		}
