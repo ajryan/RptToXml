@@ -21,7 +21,7 @@ namespace RptToXml
 		private const FormatTypes ShowFormatTypes = FormatTypes.AreaFormat | FormatTypes.SectionFormat | FormatTypes.Color;
 
 		private ReportDocument _report;
-        private ISCDReportClientDocument _rcd;
+		private ISCDReportClientDocument _rcd;
 		private bool _createdReport;
 
 		public RptDefinitionWriter(string filename)
@@ -29,7 +29,7 @@ namespace RptToXml
 			_createdReport = true;
 			_report = new ReportDocument();
 			_report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
-            _rcd = _report.ReportClientDocument;
+			_rcd = _report.ReportClientDocument;
 
 			Trace.WriteLine("Loaded report");
 		}
@@ -65,7 +65,7 @@ namespace RptToXml
 			writer.Flush();
 		}
 
-        //This is a recursive method.  GetSubreports() calls it.
+		//This is a recursive method.  GetSubreports() calls it.
 		private void ProcessReport(ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "Report");
@@ -142,9 +142,9 @@ namespace RptToXml
 
 			writer.WriteEndElement();
 
-            CRReportDefModel.PrintOptions rdm_po = GetRASRDMPrintOptionsObject(report.Name, report);
-            if (rdm_po != null)
-                GetPageMarginConditionFormulas(rdm_po, writer);
+			CRReportDefModel.PrintOptions rdm_po = GetRASRDMPrintOptionsObject(report.Name, report);
+			if (rdm_po != null)
+				GetPageMarginConditionFormulas(rdm_po, writer);
 
 			writer.WriteEndElement();
 		}
@@ -313,11 +313,11 @@ namespace RptToXml
 				WriteAndTraceStartElement(writer, "Group");
 				writer.WriteAttributeString("ConditionField", group.ConditionField.FormulaName);
 
-                //TODO: Not sure how to properly reference the GroupOptions from DDM.  romanows
-                //CRDataDefModel.GroupOptions rdm_go = GetRASDDMGroupOptionsObject(report);
-                //if (rdm_ro != null)
-                //    GetGroupOptionsConditionFormulas(rdm_go, writer);
-                
+				//TODO: Not sure how to properly reference the GroupOptions from DDM.  romanows
+				//CRDataDefModel.GroupOptions rdm_go = GetRASDDMGroupOptionsObject(report);
+				//if (rdm_ro != null)
+				//    GetGroupOptionsConditionFormulas(rdm_go, writer);
+				
 				writer.WriteEndElement();
 
 			}
@@ -423,9 +423,11 @@ namespace RptToXml
 			else if (fo is ParameterFieldDefinition)
 			{
 				var pf = (ParameterFieldDefinition)fo;
+				var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
 
 				WriteAndTraceStartElement(writer, "ParameterFieldDefinition");
 
+				writer.WriteAttributeString("AllowCustomCurrentValues", ddm_pf.AllowCustomCurrentValues.ToString());
 				writer.WriteAttributeString("EditMask", pf.EditMask);
 				writer.WriteAttributeString("EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
 				writer.WriteAttributeString("EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
@@ -433,6 +435,7 @@ namespace RptToXml
 				writer.WriteAttributeString("FormulaName", pf.FormulaName);
 				writer.WriteAttributeString("HasCurrentValue", pf.HasCurrentValue.ToString());
 				writer.WriteAttributeString("Kind", pf.Kind.ToString());
+				writer.WriteAttributeString("IsOptionalPrompt", pf.IsOptionalPrompt.ToString());
 				//writer.WriteAttributeString("MaximumValue", (string) pf.MaximumValue);
 				//writer.WriteAttributeString("MinimumValue", (string) pf.MinimumValue);
 				writer.WriteAttributeString("Name", pf.Name);
@@ -444,6 +447,53 @@ namespace RptToXml
 				writer.WriteAttributeString("PromptText", pf.PromptText);
 				writer.WriteAttributeString("ReportName", pf.ReportName);
 				writer.WriteAttributeString("ValueType", pf.ValueType.ToString());
+
+				WriteAndTraceStartElement(writer, "ParameterDefaultValues");
+				if (pf.DefaultValues.Count > 0) {
+					foreach (ParameterValue pv in pf.DefaultValues )
+					{
+						WriteAndTraceStartElement(writer, "ParameterDefaultValue");
+						writer.WriteAttributeString("Description", pv.Description);
+						// TODO: document dynamic parameters
+						if (!pv.IsRange)
+						{
+							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+							writer.WriteAttributeString("Value", pdv.Value.ToString());
+						}
+						writer.WriteEndElement();
+					}
+				}
+				writer.WriteEndElement();
+
+				WriteAndTraceStartElement(writer, "ParameterInitialValues");
+				if (ddm_pf.InitialValues.Count > 0) {
+					foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
+					{
+						WriteAndTraceStartElement(writer, "ParameterInitialValue");
+						CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
+						writer.WriteAttributeString("Value", pdv.Value.ToString());
+						writer.WriteEndElement();
+					}                 
+				}
+				writer.WriteEndElement();
+				
+
+				WriteAndTraceStartElement(writer, "ParameterCurrentValues");
+				if (pf.CurrentValues.Count > 0) {
+					foreach (ParameterValue pv in pf.CurrentValues )
+					{
+						WriteAndTraceStartElement(writer, "ParameterCurrentValue");
+						writer.WriteAttributeString("Description", pv.Description);
+						// TODO: document dynamic parameters
+						if (!pv.IsRange)
+						{
+							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+							writer.WriteAttributeString("Value", pdv.Value.ToString());
+						}
+						writer.WriteEndElement();
+					}
+				}
+				writer.WriteEndElement();
 
 			}
 			else if (fo is RunningTotalFieldDefinition)
@@ -515,7 +565,28 @@ namespace RptToXml
 				writer.WriteAttributeString("ValueType", sf.ValueType.ToString());
 
 			}
-            writer.WriteEndElement();
+			writer.WriteEndElement();
+		}
+
+		private CRDataDefModel.ParameterField GetRASDDMParameterFieldObject(string fieldName, ReportDocument report)
+		{
+			CRDataDefModel.ParameterField rdm;
+			if (report.IsSubreport)
+			{
+				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				rdm = subrptClientDoc.DataDefController.DataDefinition.ParameterFields.FindField(fieldName,
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.ParameterField;
+			}
+			else
+			{
+				rdm = _rcd.DataDefController.DataDefinition.ParameterFields.FindField(fieldName, 
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.ParameterField;
+			}
+			return rdm;
+		}
+
+		private void GetParameterValue(ParameterValue pv, XmlWriter writer)
+		{ 
 		}
 
 		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
@@ -529,7 +600,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
 			writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
 			writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
-            
+			
 			writer.WriteEndElement();
 		}
 
@@ -537,18 +608,18 @@ namespace RptToXml
 		{
 			WriteAndTraceStartElement(writer, "Border");
 
-            var border = ro.Border;
+			var border = ro.Border;
 			writer.WriteAttributeString("BottomLineStyle", border.BottomLineStyle.ToString());
 			writer.WriteAttributeString("HasDropShadow", border.HasDropShadow.ToString());
 			writer.WriteAttributeString("LeftLineStyle", border.LeftLineStyle.ToString());
 			writer.WriteAttributeString("RightLineStyle", border.RightLineStyle.ToString());
 			writer.WriteAttributeString("TopLineStyle", border.TopLineStyle.ToString());
 
-            CRReportDefModel.ISCRReportObject rdm_ro = GetRASRDMReportObjectFromCRENGReportObject(ro.Name, report);
-            if (rdm_ro != null)
-                GetBorderConditionFormulas(rdm_ro, writer);
+			CRReportDefModel.ISCRReportObject rdm_ro = GetRASRDMReportObjectFromCRENGReportObject(ro.Name, report);
+			if (rdm_ro != null)
+				GetBorderConditionFormulas(rdm_ro, writer);
 			
-            if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(border.BackgroundColor, writer, "BackgroundColor");
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 				GetColorFormat(border.BorderColor, writer, "BorderColor");
@@ -589,8 +660,8 @@ namespace RptToXml
 			writer.WriteAttributeString("SystemFontName", font.SystemFontName);
 			writer.WriteAttributeString("Underline", font.Underline.ToString());
 			writer.WriteAttributeString("Unit", font.Unit.ToString());
-            if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-                GetFontColorConditionFormulas();
+			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+				GetFontColorConditionFormulas();
 
 			writer.WriteEndElement();
 		}
@@ -606,7 +677,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableSuppress", objectFormat.EnableSuppress.ToString());
 			writer.WriteAttributeString("HorizontalAlignment", objectFormat.HorizontalAlignment.ToString());
 
-            GetObjectFormatConditionFormulas();
+			GetObjectFormatConditionFormulas();
 
 			writer.WriteEndElement();
 		}
@@ -617,24 +688,24 @@ namespace RptToXml
 
 			writer.WriteAttributeString("CssClass", section.SectionFormat.CssClass);
 			writer.WriteAttributeString("EnableKeepTogether", section.SectionFormat.EnableKeepTogether.ToString());
-            writer.WriteAttributeString("EnableNewPageAfter", section.SectionFormat.EnableNewPageAfter.ToString());
-            writer.WriteAttributeString("EnableNewPageBefore", section.SectionFormat.EnableNewPageBefore.ToString());
-            writer.WriteAttributeString("EnablePrintAtBottomOfPage", section.SectionFormat.EnablePrintAtBottomOfPage.ToString());
-            writer.WriteAttributeString("EnableResetPageNumberAfter", section.SectionFormat.EnableResetPageNumberAfter.ToString());
-            writer.WriteAttributeString("EnableSuppress", section.SectionFormat.EnableSuppress.ToString());
-            writer.WriteAttributeString("EnableSuppressIfBlank", section.SectionFormat.EnableSuppressIfBlank.ToString());
-            writer.WriteAttributeString("EnableUnderlaySection", section.SectionFormat.EnableUnderlaySection.ToString());
+			writer.WriteAttributeString("EnableNewPageAfter", section.SectionFormat.EnableNewPageAfter.ToString());
+			writer.WriteAttributeString("EnableNewPageBefore", section.SectionFormat.EnableNewPageBefore.ToString());
+			writer.WriteAttributeString("EnablePrintAtBottomOfPage", section.SectionFormat.EnablePrintAtBottomOfPage.ToString());
+			writer.WriteAttributeString("EnableResetPageNumberAfter", section.SectionFormat.EnableResetPageNumberAfter.ToString());
+			writer.WriteAttributeString("EnableSuppress", section.SectionFormat.EnableSuppress.ToString());
+			writer.WriteAttributeString("EnableSuppressIfBlank", section.SectionFormat.EnableSuppressIfBlank.ToString());
+			writer.WriteAttributeString("EnableUnderlaySection", section.SectionFormat.EnableUnderlaySection.ToString());
 
-            CRReportDefModel.Section rdm_ro = GetRASRDMSectionObjectFromCRENGSectionObject(section.Name, report);
-            if (rdm_ro != null)
-                GetSectionAreaFormatConditionFormulas(rdm_ro, writer);
-        
+			CRReportDefModel.Section rdm_ro = GetRASRDMSectionObjectFromCRENGSectionObject(section.Name, report);
+			if (rdm_ro != null)
+				GetSectionAreaFormatConditionFormulas(rdm_ro, writer);
+		
 
 			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-                GetColorFormat(section.SectionFormat.BackgroundColor, writer, "BackgroundColor");
+				GetColorFormat(section.SectionFormat.BackgroundColor, writer, "BackgroundColor");
 
-            writer.WriteEndElement();
-        }
+			writer.WriteEndElement();
+		}
 
 		private void GetReportDefinition(ReportDocument report, XmlWriter writer)
 		{
@@ -658,7 +729,7 @@ namespace RptToXml
 
 				if ((ShowFormatTypes & FormatTypes.AreaFormat) == FormatTypes.AreaFormat)
 					GetAreaFormat(area, report, writer);
-                GetSections(area, report, writer);
+				GetSections(area, report, writer);
 
 				writer.WriteEndElement();
 			}
@@ -785,20 +856,20 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
-        // pretty much straight from api docs
-        private CommonFieldFormat GetCommonFieldFormat(string reportObjectName, ReportDocument report)
-        {
-            FieldObject field;
-            CommonFieldFormat commonFormat;
-            field = report.ReportDefinition.ReportObjects[reportObjectName]
-            as FieldObject;
-            if (field != null)
-            {
-                commonFormat = field.FieldFormat.CommonFormat;
-                return commonFormat;
-            }
-            else return null;
-        }
+		// pretty much straight from api docs
+		private CommonFieldFormat GetCommonFieldFormat(string reportObjectName, ReportDocument report)
+		{
+			FieldObject field;
+			CommonFieldFormat commonFormat;
+			field = report.ReportDefinition.ReportObjects[reportObjectName]
+			as FieldObject;
+			if (field != null)
+			{
+				commonFormat = field.FieldFormat.CommonFormat;
+				return commonFormat;
+			}
+			else return null;
+		}
 
 		private static void WriteAndTraceStartElement(XmlWriter writer, string elementName)
 		{
@@ -823,8 +894,8 @@ namespace RptToXml
 					_report = null;
 				}
 
-                if (_rcd != null && _createdReport)
-                    _rcd = null;
+				if (_rcd != null && _createdReport)
+					_rcd = null;
 			}
 		}
 
