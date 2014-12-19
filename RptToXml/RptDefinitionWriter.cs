@@ -585,10 +585,6 @@ namespace RptToXml
 			return rdm;
 		}
 
-		private void GetParameterValue(ParameterValue pv, XmlWriter writer)
-		{ 
-		}
-
 		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "AreaFormat");
