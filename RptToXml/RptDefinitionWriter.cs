@@ -116,7 +116,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnableSaveSummariesWithReport", report.ReportOptions.EnableSaveSummariesWithReport.ToString());
 			writer.WriteAttributeString("EnableUseDummyData", report.ReportOptions.EnableUseDummyData.ToString());
 			writer.WriteAttributeString("initialDataContext", report.ReportOptions.InitialDataContext);
-			writer.WriteAttributeString("initialReportPartName", report.ReportOptions.InitialDataContext);
+			writer.WriteAttributeString("initialReportPartName", report.ReportOptions.InitialReportPartName);
 
 			writer.WriteEndElement();
 		}
@@ -344,38 +344,38 @@ namespace RptToXml
 
 			WriteAndTraceStartElement(writer, "FormulaFieldDefinitions");
 			foreach (var field in report.DataDefinition.FormulaFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			WriteAndTraceStartElement(writer, "GroupNameFieldDefinitions");
 			foreach (var field in report.DataDefinition.GroupNameFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			WriteAndTraceStartElement(writer, "ParameterFieldDefinitions");
 			foreach (var field in report.DataDefinition.ParameterFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			WriteAndTraceStartElement(writer, "RunningTotalFieldDefinitions");
 			foreach (var field in report.DataDefinition.RunningTotalFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			WriteAndTraceStartElement(writer, "SQLExpressionFields");
 			foreach (var field in report.DataDefinition.SQLExpressionFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			WriteAndTraceStartElement(writer, "SummaryFields");
 			foreach (var field in report.DataDefinition.SummaryFields)
-				GetFieldObject(field, writer);
+				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
 			writer.WriteEndElement();
 		}
 
-		private void GetFieldObject(Object fo, XmlWriter writer)
+		private void GetFieldObject(Object fo, ReportDocument report, XmlWriter writer)
 		{
 			if (fo is DatabaseFieldDefinition)
 			{
@@ -390,7 +390,6 @@ namespace RptToXml
 				writer.WriteAttributeString("TableName", df.TableName);
 				writer.WriteAttributeString("ValueType", df.ValueType.ToString());
 
-				writer.WriteEndElement();
 			}
 			else if (fo is FormulaFieldDefinition)
 			{
@@ -405,7 +404,6 @@ namespace RptToXml
 				writer.WriteAttributeString("ValueType", ff.ValueType.ToString());
 				writer.WriteString(ff.Text);
 
-				writer.WriteEndElement();
 			}
 			else if (fo is GroupNameFieldDefinition)
 			{
@@ -421,14 +419,15 @@ namespace RptToXml
 				writer.WriteAttributeString("NumberOfBytes", gnf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				writer.WriteAttributeString("ValueType", gnf.ValueType.ToString());
 
-				writer.WriteEndElement();
 			}
 			else if (fo is ParameterFieldDefinition)
 			{
 				var pf = (ParameterFieldDefinition)fo;
+				var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
 
 				WriteAndTraceStartElement(writer, "ParameterFieldDefinition");
 
+				writer.WriteAttributeString("AllowCustomCurrentValues", ddm_pf.AllowCustomCurrentValues.ToString());
 				writer.WriteAttributeString("EditMask", pf.EditMask);
 				writer.WriteAttributeString("EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
 				writer.WriteAttributeString("EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
@@ -436,6 +435,7 @@ namespace RptToXml
 				writer.WriteAttributeString("FormulaName", pf.FormulaName);
 				writer.WriteAttributeString("HasCurrentValue", pf.HasCurrentValue.ToString());
 				writer.WriteAttributeString("Kind", pf.Kind.ToString());
+				writer.WriteAttributeString("IsOptionalPrompt", pf.IsOptionalPrompt.ToString());
 				//writer.WriteAttributeString("MaximumValue", (string) pf.MaximumValue);
 				//writer.WriteAttributeString("MinimumValue", (string) pf.MinimumValue);
 				writer.WriteAttributeString("Name", pf.Name);
@@ -448,7 +448,53 @@ namespace RptToXml
 				writer.WriteAttributeString("ReportName", pf.ReportName);
 				writer.WriteAttributeString("ValueType", pf.ValueType.ToString());
 
+				WriteAndTraceStartElement(writer, "ParameterDefaultValues");
+				if (pf.DefaultValues.Count > 0) {
+					foreach (ParameterValue pv in pf.DefaultValues )
+					{
+						WriteAndTraceStartElement(writer, "ParameterDefaultValue");
+						writer.WriteAttributeString("Description", pv.Description);
+						// TODO: document dynamic parameters
+						if (!pv.IsRange)
+						{
+							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+							writer.WriteAttributeString("Value", pdv.Value.ToString());
+						}
 				writer.WriteEndElement();
+			}
+				}
+				writer.WriteEndElement();
+
+				WriteAndTraceStartElement(writer, "ParameterInitialValues");
+				if (ddm_pf.InitialValues.Count > 0) {
+					foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
+					{
+						WriteAndTraceStartElement(writer, "ParameterInitialValue");
+						CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
+						writer.WriteAttributeString("Value", pdv.Value.ToString());
+						writer.WriteEndElement();
+					}                 
+				}
+				writer.WriteEndElement();
+				
+
+				WriteAndTraceStartElement(writer, "ParameterCurrentValues");
+				if (pf.CurrentValues.Count > 0) {
+					foreach (ParameterValue pv in pf.CurrentValues )
+					{
+						WriteAndTraceStartElement(writer, "ParameterCurrentValue");
+						writer.WriteAttributeString("Description", pv.Description);
+						// TODO: document dynamic parameters
+						if (!pv.IsRange)
+						{
+							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+							writer.WriteAttributeString("Value", pdv.Value.ToString());
+						}
+						writer.WriteEndElement();
+					}
+				}
+				writer.WriteEndElement();
+
 			}
 			else if (fo is RunningTotalFieldDefinition)
 			{
@@ -472,7 +518,6 @@ namespace RptToXml
 				writer.WriteAttributeString("SummarizedField", rtf.SummarizedField.FormulaName);
 				writer.WriteAttributeString("ValueType", rtf.ValueType.ToString());
 
-				writer.WriteEndElement();
 			}
 			else if (fo is SpecialVarFieldDefinition)
 			{
@@ -485,7 +530,6 @@ namespace RptToXml
 				writer.WriteAttributeString("SpecialVarType", svf.SpecialVarType.ToString());
 				writer.WriteAttributeString("ValueType", svf.ValueType.ToString());
 
-				writer.WriteEndElement();
 			}
 			else if (fo is SQLExpressionFieldDefinition)
 			{
@@ -499,7 +543,6 @@ namespace RptToXml
 				writer.WriteAttributeString("Text", sef.Text);
 				writer.WriteAttributeString("ValueType", sef.ValueType.ToString());
 
-				writer.WriteEndElement();
 			}
 			else if (fo is SummaryFieldDefinition)
 			{
@@ -521,8 +564,25 @@ namespace RptToXml
 				writer.WriteAttributeString("SummarizedField", sf.SummarizedField.ToString());
 				writer.WriteAttributeString("ValueType", sf.ValueType.ToString());
 
+			}
 				writer.WriteEndElement();
 			}
+
+		private CRDataDefModel.ParameterField GetRASDDMParameterFieldObject(string fieldName, ReportDocument report)
+		{
+			CRDataDefModel.ParameterField rdm;
+			if (report.IsSubreport)
+			{
+				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				rdm = subrptClientDoc.DataDefController.DataDefinition.ParameterFields.FindField(fieldName,
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.ParameterField;
+		}
+			else
+			{
+				rdm = _rcd.DataDefController.DataDefinition.ParameterFields.FindField(fieldName, 
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.ParameterField;
+			}
+			return rdm;
 		}
 
 		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
@@ -536,7 +596,7 @@ namespace RptToXml
 			writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
 			writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
 			writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
-
+			
 			writer.WriteEndElement();
 		}
 
@@ -805,7 +865,7 @@ namespace RptToXml
 
 		private static void WriteAndTraceStartElement(XmlWriter writer, string elementName)
 		{
-			Trace.WriteLine("  " + elementName);
+			//Trace.WriteLine("  " + elementName);
 			writer.WriteStartElement(elementName);
 		}
 
@@ -825,6 +885,9 @@ namespace RptToXml
 					_report.Dispose();
 					_report = null;
 				}
+
+				if (_rcd != null && _createdReport)
+					_rcd = null;
 			}
 		}
 
