@@ -10,57 +10,57 @@ namespace RptToXml
 	{
 		static void Main(string[] args)
 		{
-				if (args.Length < 1)
-				{
-					Console.WriteLine("Usage: RptToXml.exe <RPT filename | wildcard> [outputfilename]");
-					Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
-					return;
-				}
+			if (args.Length < 1)
+			{
+				Console.WriteLine("Usage: RptToXml.exe <RPT filename | wildcard> [outputfilename]");
+				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
+				return;
+			}
 
-				string rptPathArg = args[0];
-				bool wildCard = rptPathArg.Contains("*");
-				if (!wildCard && !ReportFilenameValid(rptPathArg))
-					return;
+			string rptPathArg = args[0];
+			bool wildCard = rptPathArg.Contains("*");
+			if (!wildCard && !ReportFilenameValid(rptPathArg))
+				return;
 
-				if (wildCard && args.Length > 1)
-				{
+			if (wildCard && args.Length > 1)
+			{
 				Console.WriteLine("Output filename may not be specified with wildcard.");
-					return;
-				}
+				return;
+			}
 
-			    Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-				var rptPaths = new List<string>();
-				if (!wildCard)
+			var rptPaths = new List<string>();
+			if (!wildCard)
+			{
+				rptPaths.Add(rptPathArg);
+			}
+			else
+			{
+				var directory = Path.GetDirectoryName(rptPathArg);
+				if (!String.IsNullOrEmpty(directory))
 				{
-					rptPaths.Add(rptPathArg);
+					var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
+					rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
 				}
-				else
-				{
-					var directory = Path.GetDirectoryName(rptPathArg);
-					if (!String.IsNullOrEmpty(directory))
-					{
-						var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
-						rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
-					}
-				}
+			}
 
-				if (rptPaths.Count == 0)
-				{
+			if (rptPaths.Count == 0)
+			{
 				Trace.WriteLine("No reports matched the wildcard.");
-				}
+			}
 
-				foreach (string rptPath in rptPaths)
-				{
+			foreach (string rptPath in rptPaths)
+			{
 				Trace.WriteLine("Dumping " + rptPath);
 
-					using (var writer = new RptDefinitionWriter(rptPath))
-					{
-						string xmlPath = args.Length > 1 ?
-							args[1] : Path.ChangeExtension(rptPath, "xml");
-						writer.WriteToXml(xmlPath);
-					}
+				using (var writer = new RptDefinitionWriter(rptPath))
+				{
+					string xmlPath = args.Length > 1 ?
+						args[1] : Path.ChangeExtension(rptPath, "xml");
+					writer.WriteToXml(xmlPath);
 				}
+			}
 		}
 
 		static bool ReportFilenameValid(string rptPath)
