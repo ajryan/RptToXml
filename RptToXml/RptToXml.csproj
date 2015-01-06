@@ -55,6 +55,10 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -68,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionFormulas.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
