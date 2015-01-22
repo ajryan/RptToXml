@@ -423,77 +423,94 @@ namespace RptToXml
 			else if (fo is ParameterFieldDefinition)
 			{
 				var pf = (ParameterFieldDefinition)fo;
-				var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
+
+				// if it is a linked parameter, it is passed into a subreport. Just record the actual linkage in the main report.
+				// The parameter will be reported in full when the subreport is exported.  
+				var parameterIsLinked = (!report.IsSubreport && pf.IsLinked());
 
 				WriteAndTraceStartElement(writer, "ParameterFieldDefinition");
 
-				writer.WriteAttributeString("AllowCustomCurrentValues", ddm_pf.AllowCustomCurrentValues.ToString());
-				writer.WriteAttributeString("EditMask", pf.EditMask);
-				writer.WriteAttributeString("EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
-				writer.WriteAttributeString("EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
-				writer.WriteAttributeString("EnableNullValue", pf.EnableNullValue.ToString());
-				writer.WriteAttributeString("FormulaName", pf.FormulaName);
-				writer.WriteAttributeString("HasCurrentValue", pf.HasCurrentValue.ToString());
-				writer.WriteAttributeString("Kind", pf.Kind.ToString());
-				writer.WriteAttributeString("IsOptionalPrompt", pf.IsOptionalPrompt.ToString());
-				//writer.WriteAttributeString("MaximumValue", (string) pf.MaximumValue);
-				//writer.WriteAttributeString("MinimumValue", (string) pf.MinimumValue);
-				writer.WriteAttributeString("Name", pf.Name);
-				writer.WriteAttributeString("NumberOfBytes", pf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
-				writer.WriteAttributeString("ParameterFieldName", pf.ParameterFieldName);
-				writer.WriteAttributeString("ParameterFieldUsage", pf.ParameterFieldUsage2.ToString());
-				writer.WriteAttributeString("ParameterType", pf.ParameterType.ToString());
-				writer.WriteAttributeString("ParameterValueKind", pf.ParameterValueKind.ToString());
-				writer.WriteAttributeString("PromptText", pf.PromptText);
-				writer.WriteAttributeString("ReportName", pf.ReportName);
-				writer.WriteAttributeString("ValueType", pf.ValueType.ToString());
-
-				WriteAndTraceStartElement(writer, "ParameterDefaultValues");
-				if (pf.DefaultValues.Count > 0) {
-					foreach (ParameterValue pv in pf.DefaultValues )
-					{
-						WriteAndTraceStartElement(writer, "ParameterDefaultValue");
-						writer.WriteAttributeString("Description", pv.Description);
-						// TODO: document dynamic parameters
-						if (!pv.IsRange)
-						{
-							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
-							writer.WriteAttributeString("Value", pdv.Value.ToString());
-						}
-				writer.WriteEndElement();
-			}
+				if (parameterIsLinked)
+				{
+					writer.WriteAttributeString("Name", pf.Name);
+					writer.WriteAttributeString("IsLinkedToSubreport", pf.IsLinked().ToString());
+					writer.WriteAttributeString("ReportName", pf.ReportName);
 				}
-				writer.WriteEndElement();
+				else
+				{
+					var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
 
-				WriteAndTraceStartElement(writer, "ParameterInitialValues");
-				if (ddm_pf.InitialValues.Count > 0) {
-					foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
-					{
-						WriteAndTraceStartElement(writer, "ParameterInitialValue");
-						CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
-						writer.WriteAttributeString("Value", pdv.Value.ToString());
-						writer.WriteEndElement();
-					}                 
-				}
-				writer.WriteEndElement();
-				
+					writer.WriteAttributeString("AllowCustomCurrentValues", ddm_pf.AllowCustomCurrentValues.ToString());
+					writer.WriteAttributeString("EditMask", pf.EditMask);
+					writer.WriteAttributeString("EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
+					writer.WriteAttributeString("EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
+					writer.WriteAttributeString("EnableNullValue", pf.EnableNullValue.ToString());
+					writer.WriteAttributeString("FormulaName", pf.FormulaName);
+					writer.WriteAttributeString("HasCurrentValue", pf.HasCurrentValue.ToString());
+					writer.WriteAttributeString("IsOptionalPrompt", pf.IsOptionalPrompt.ToString());
+					writer.WriteAttributeString("Kind", pf.Kind.ToString());
+					//writer.WriteAttributeString("MaximumValue", (string) pf.MaximumValue);
+					//writer.WriteAttributeString("MinimumValue", (string) pf.MinimumValue);
+					writer.WriteAttributeString("Name", pf.Name);
+					writer.WriteAttributeString("NumberOfBytes", pf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
+					writer.WriteAttributeString("ParameterFieldName", pf.ParameterFieldName);
+					writer.WriteAttributeString("ParameterFieldUsage", pf.ParameterFieldUsage2.ToString());
+					writer.WriteAttributeString("ParameterType", pf.ParameterType.ToString());
+					writer.WriteAttributeString("ParameterValueKind", pf.ParameterValueKind.ToString());
+					writer.WriteAttributeString("PromptText", pf.PromptText);
+					writer.WriteAttributeString("ReportName", pf.ReportName);
+					writer.WriteAttributeString("ValueType", pf.ValueType.ToString());
 
-				WriteAndTraceStartElement(writer, "ParameterCurrentValues");
-				if (pf.CurrentValues.Count > 0) {
-					foreach (ParameterValue pv in pf.CurrentValues )
+					WriteAndTraceStartElement(writer, "ParameterDefaultValues");
+					if (pf.DefaultValues.Count > 0)
 					{
-						WriteAndTraceStartElement(writer, "ParameterCurrentValue");
-						writer.WriteAttributeString("Description", pv.Description);
-						// TODO: document dynamic parameters
-						if (!pv.IsRange)
+						foreach (ParameterValue pv in pf.DefaultValues)
 						{
-							ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
-							writer.WriteAttributeString("Value", pdv.Value.ToString());
+							WriteAndTraceStartElement(writer, "ParameterDefaultValue");
+							writer.WriteAttributeString("Description", pv.Description);
+							// TODO: document dynamic parameters
+							if (!pv.IsRange)
+							{
+								ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+								writer.WriteAttributeString("Value", pdv.Value.ToString());
+							}
+							writer.WriteEndElement();
 						}
-						writer.WriteEndElement();
 					}
+					writer.WriteEndElement();
+
+					WriteAndTraceStartElement(writer, "ParameterInitialValues");
+					if (ddm_pf.InitialValues.Count > 0)
+					{
+						foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
+						{
+							WriteAndTraceStartElement(writer, "ParameterInitialValue");
+							CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
+							writer.WriteAttributeString("Value", pdv.Value.ToString());
+							writer.WriteEndElement();
+						}
+					}
+					writer.WriteEndElement();
+
+
+					WriteAndTraceStartElement(writer, "ParameterCurrentValues");
+					if (pf.CurrentValues.Count > 0)
+					{
+						foreach (ParameterValue pv in pf.CurrentValues)
+						{
+							WriteAndTraceStartElement(writer, "ParameterCurrentValue");
+							writer.WriteAttributeString("Description", pv.Description);
+							// TODO: document dynamic parameters
+							if (!pv.IsRange)
+							{
+								ParameterDiscreteValue pdv = (ParameterDiscreteValue)pv;
+								writer.WriteAttributeString("Value", pdv.Value.ToString());
+							}
+							writer.WriteEndElement();
+						}
+					}
+					writer.WriteEndElement();
 				}
-				writer.WriteEndElement();
 
 			}
 			else if (fo is RunningTotalFieldDefinition)
