@@ -630,28 +630,28 @@ namespace RptToXml
 
 		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
 		{
-				if (area.Kind == AreaSectionKind.GroupHeader)
-				{
-					GroupAreaFormat gaf = (GroupAreaFormat)area.AreaFormat;
-					WriteAndTraceStartElement(writer, "GroupAreaFormat");
-					writer.WriteAttributeString("EnableKeepGroupTogether", gaf.EnableKeepGroupTogether.ToString());
-					writer.WriteAttributeString("EnableRepeatGroupHeader", gaf.EnableRepeatGroupHeader.ToString());
-					writer.WriteAttributeString("VisibleGroupNumberPerPage", gaf.VisibleGroupNumberPerPage.ToString());
-					writer.WriteEndElement();
-				}	
-
-				WriteAndTraceStartElement(writer, "AreaFormat");
-
-				writer.WriteAttributeString("EnableHideForDrillDown", area.AreaFormat.EnableHideForDrillDown.ToString());
-				writer.WriteAttributeString("EnableKeepTogether", area.AreaFormat.EnableKeepTogether.ToString());
-				writer.WriteAttributeString("EnableNewPageAfter", area.AreaFormat.EnableNewPageAfter.ToString());
-				writer.WriteAttributeString("EnableNewPageBefore", area.AreaFormat.EnableNewPageBefore.ToString());
-				writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
-				writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
-				writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
+			if (area.Kind == AreaSectionKind.GroupHeader)
+			{
+				GroupAreaFormat gaf = (GroupAreaFormat)area.AreaFormat;
+				WriteAndTraceStartElement(writer, "GroupAreaFormat");
+				writer.WriteAttributeString("EnableKeepGroupTogether", gaf.EnableKeepGroupTogether.ToString());
+				writer.WriteAttributeString("EnableRepeatGroupHeader", gaf.EnableRepeatGroupHeader.ToString());
+				writer.WriteAttributeString("VisibleGroupNumberPerPage", gaf.VisibleGroupNumberPerPage.ToString());
 				writer.WriteEndElement();
+			}	
+
+			WriteAndTraceStartElement(writer, "AreaFormat");
+
+			writer.WriteAttributeString("EnableHideForDrillDown", area.AreaFormat.EnableHideForDrillDown.ToString());
+			writer.WriteAttributeString("EnableKeepTogether", area.AreaFormat.EnableKeepTogether.ToString());
+			writer.WriteAttributeString("EnableNewPageAfter", area.AreaFormat.EnableNewPageAfter.ToString());
+			writer.WriteAttributeString("EnableNewPageBefore", area.AreaFormat.EnableNewPageBefore.ToString());
+			writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
+			writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
+			writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
+			writer.WriteEndElement();
 					
-			}
+		
 		}
 
 		private void GetBorderFormat(ReportObject ro, ReportDocument report, XmlWriter writer)
