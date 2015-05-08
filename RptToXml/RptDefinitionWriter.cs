@@ -104,7 +104,7 @@ namespace RptToXml
 							using (var md5Provider = new MD5CryptoServiceProvider())
 							{
 								byte[] md5Hash = md5Provider.ComputeHash(streamBytes);
-                writer.WriteAttributeString("MD5Hash", Convert.ToBase64String(md5Hash));
+				writer.WriteAttributeString("MD5Hash", Convert.ToBase64String(md5Hash));
 							}
 						}
 						writer.WriteEndElement();
@@ -343,11 +343,6 @@ namespace RptToXml
 			{
 				WriteAndTraceStartElement(writer, "Group");
 				writer.WriteAttributeString("ConditionField", group.ConditionField.FormulaName);
-
-				//TODO: Not sure how to properly reference the GroupOptions from DDM.  romanows
-				//CRDataDefModel.GroupOptions rdm_go = GetRASDDMGroupOptionsObject(report);
-				//if (rdm_ro != null)
-				//    GetGroupOptionsConditionFormulas(rdm_go, writer);
 
 				writer.WriteEndElement();
 
@@ -635,17 +630,28 @@ namespace RptToXml
 
 		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
 		{
-			WriteAndTraceStartElement(writer, "AreaFormat");
+				if (area.Kind == AreaSectionKind.GroupHeader)
+				{
+					GroupAreaFormat gaf = (GroupAreaFormat)area.AreaFormat;
+					WriteAndTraceStartElement(writer, "GroupAreaFormat");
+					writer.WriteAttributeString("EnableKeepGroupTogether", gaf.EnableKeepGroupTogether.ToString());
+					writer.WriteAttributeString("EnableRepeatGroupHeader", gaf.EnableRepeatGroupHeader.ToString());
+					writer.WriteAttributeString("VisibleGroupNumberPerPage", gaf.VisibleGroupNumberPerPage.ToString());
+					writer.WriteEndElement();
+				}	
 
-			writer.WriteAttributeString("EnableHideForDrillDown", area.AreaFormat.EnableHideForDrillDown.ToString());
-			writer.WriteAttributeString("EnableKeepTogether", area.AreaFormat.EnableKeepTogether.ToString());
-			writer.WriteAttributeString("EnableNewPageAfter", area.AreaFormat.EnableNewPageAfter.ToString());
-			writer.WriteAttributeString("EnableNewPageBefore", area.AreaFormat.EnableNewPageBefore.ToString());
-			writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
-			writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
-			writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
+				WriteAndTraceStartElement(writer, "AreaFormat");
 
-			writer.WriteEndElement();
+				writer.WriteAttributeString("EnableHideForDrillDown", area.AreaFormat.EnableHideForDrillDown.ToString());
+				writer.WriteAttributeString("EnableKeepTogether", area.AreaFormat.EnableKeepTogether.ToString());
+				writer.WriteAttributeString("EnableNewPageAfter", area.AreaFormat.EnableNewPageAfter.ToString());
+				writer.WriteAttributeString("EnableNewPageBefore", area.AreaFormat.EnableNewPageBefore.ToString());
+				writer.WriteAttributeString("EnablePrintAtBottomOfPage", area.AreaFormat.EnablePrintAtBottomOfPage.ToString());
+				writer.WriteAttributeString("EnableResetPageNumberAfter", area.AreaFormat.EnableResetPageNumberAfter.ToString());
+				writer.WriteAttributeString("EnableSuppress", area.AreaFormat.EnableSuppress.ToString());
+				writer.WriteEndElement();
+					
+			}
 		}
 
 		private void GetBorderFormat(ReportObject ro, ReportDocument report, XmlWriter writer)
@@ -773,6 +779,7 @@ namespace RptToXml
 
 				if ((ShowFormatTypes & FormatTypes.AreaFormat) == FormatTypes.AreaFormat)
 					GetAreaFormat(area, report, writer);
+
 				GetSections(area, report, writer);
 
 				writer.WriteEndElement();

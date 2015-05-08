@@ -41,20 +41,24 @@ namespace RptToXml
 			return rdm;
 		}
 
-		private CRDataDefModel.GroupOptions GetRASDDMGroupOptionsObject(ReportDocument report)
+		private GroupAreaFormat GetRASDDMGroupAreaFormatObject(Group group, ReportDocument report)
 		{
 			//TODO:  finish me, not sure how to reference GroupOptions object.  The GroupOptionsConditionFormulas
 			// has 2 forms, one is sort and group and the other is the collection that we are used to seeing.  It is confusing.
-			CRDataDefModel.GroupOptions rdm = null;
+			GroupAreaFormat gaf = null;
 			if (report.IsSubreport)
 			{
-				//var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				//var groups = subrptClientDoc.DataDefController.GroupController.FindGroup(fieldName);
+				//gaf = subrptClientDoc.ReportDefController.ReportDefinition.FindObjectByName();
+				
 			}
 			else
-			{}
-				//rdm = _rcd.ReportDocument.GroupOptions as CRDataDefModel.GroupOptions;
+			{
+				//gaf = _rcd;
+			}
 
-			return rdm;
+			return gaf;
 		}
 
 		private CRReportDefModel.PrintOptions GetRASRDMPrintOptionsObject(string name, ReportDocument report)
