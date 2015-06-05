@@ -1,75 +1,54 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>RPT to XML by ajryan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">RPT to XML</h1>
+      <h2 class="project-tagline">Crystal Reports to XML converter</h2>
+      <a href="https://github.com/ajryan/RptToXml" class="btn">View on GitHub</a>
+      <a href="https://github.com/ajryan/RptToXml/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ajryan/RptToXml/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-  <title>ajryan/RptToXml @ GitHub</title>
+    <section class="main-content">
+      <h1>
+<a id="rpttoxml" class="anchor" href="#rpttoxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>RptToXml</h1>
 
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #0e1b0f;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #ffffff;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #f1e4f0; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #f1e4f0; }
-    h3 { text-align: center; color: #f1e4f0; }
-    a { color: #f1e4f0; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
+<p>Dumps a Crystal Reports RPT file to XML. Useful for diffs.</p>
 
-<body>
-  <a href="https://github.com/ajryan/RptToXml"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<p>Binary releases available on the <a href="https://github.com/ajryan/RptToXml/releases">Releases</a> page.</p>
 
-  <div id="container">
+<p>Ported to C# from the <a href="http://code.google.com/p/rpttoxml/">original VB project</a></p>
 
-    <div class="download">
-      <a href="https://github.com/ajryan/RptToXml/zipball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/zip.png"></a>
-      <a href="https://github.com/ajryan/RptToXml/tarball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/tar.png"></a>
-    </div>
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
 
-    <h1><a href="https://github.com/ajryan/RptToXml">RptToXml</a>
-      <span class="small">by <a href="https://github.com/ajryan">ajryan</a></span></h1>
+<p>RptToXml references Crystal Reports assemblies. The easiest way to get them onto a development machine is to install the Crystal Reports Runtime from an MSI downloaded from <a href="http://scn.sap.com/docs/DOC-7824">this page</a>. The most recent support pack of Crystal Reports 13 should work.</p>
 
-    <div class="description">
-      Crystal Reports to XML converter
-    </div>
+<p>The solution should build with VS2012 or higher. Express editions have not been tested but should work.</p>
 
-      <h2>Authors</h2>
-      <p>ajryan (ryan.aidan@gmail.com)
-<br/>      </p>
-    
+<h2>
+<a id="thanks" class="anchor" href="#thanks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Thanks</h2>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="https://github.com/ajryan/RptToXml/zipball/master">zip</a> or
-      <a href="https://github.com/ajryan/RptToXml/tarball/master">tar formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/ajryan/RptToXml</pre>
-    </p>
+<p>Thanks to <a href="http://www.jetbrains.com/resharper/features/index.html?linklogos">JetBrains</a> for providing ReSharper liceness to open source projects!</p>
 
-    <div class="footer">
-      get the source code on GitHub : <a href="https://github.com/ajryan/RptToXml">ajryan/RptToXml</a>
-    </div>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ajryan/RptToXml">RPT to XML</a> is maintained by <a href="https://github.com/ajryan">ajryan</a>.</span>
 
-  </div>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-</body>
+    </section>
+
+  
+  </body>
 </html>
+
