@@ -91,23 +91,25 @@ namespace RptToXml
 					WriteAndTraceStartElement(writer, "Embedinfo");
 					_oleCompoundFile.RootStorage.VisitEntries(fileItem =>
 					{
-						WriteAndTraceStartElement(writer, "Embed");
-						writer.WriteAttributeString("Name", fileItem.Name);
+						if (fileItem.Name.Contains("Ole")) {
+							WriteAndTraceStartElement(writer, "Embed");
+							writer.WriteAttributeString("Name", fileItem.Name);
 
-						var cfStream = fileItem as CFStream;
-						if (cfStream != null)
-						{
-							var streamBytes = cfStream.GetData();
-
-							writer.WriteAttributeString("Size", cfStream.Size.ToString("0"));
-
-							using (var md5Provider = new MD5CryptoServiceProvider())
+							var cfStream = fileItem as CFStream;
+							if (cfStream != null)
 							{
-								byte[] md5Hash = md5Provider.ComputeHash(streamBytes);
-				writer.WriteAttributeString("MD5Hash", Convert.ToBase64String(md5Hash));
+								var streamBytes = cfStream.GetData();
+
+								writer.WriteAttributeString("Size", cfStream.Size.ToString("0"));
+
+								using (var md5Provider = new MD5CryptoServiceProvider())
+								{
+									byte[] md5Hash = md5Provider.ComputeHash(streamBytes);
+					writer.WriteAttributeString("MD5Hash", Convert.ToBase64String(md5Hash));
+								}
 							}
+							writer.WriteEndElement();
 						}
-						writer.WriteEndElement();
 					}, true);
 					writer.WriteEndElement();
 				}
