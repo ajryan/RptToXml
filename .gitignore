@@ -131,6 +131,7 @@ publish/
 
 # NuGet Packages
 packages/*
+RptToXml/packages/*
 *.nupkg
 ## TODO: If the tool you use requires repositories.config
 ## uncomment the next line
