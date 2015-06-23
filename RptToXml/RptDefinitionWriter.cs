@@ -668,7 +668,7 @@ namespace RptToXml
 			writer.WriteAttributeString("RightLineStyle", border.RightLineStyle.ToString());
 			writer.WriteAttributeString("TopLineStyle", border.TopLineStyle.ToString());
 
-			CRReportDefModel.ISCRReportObject rdm_ro = GetRASRDMReportObjectFromCRENGReportObject(ro.Name, report);
+			CRReportDefModel.ISCRReportObject rdm_ro = GetRASRDMReportObject(ro.Name, report);
 			if (rdm_ro != null)
 				GetBorderConditionFormulas(rdm_ro, writer);
 
@@ -719,18 +719,20 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
-		private void GetObjectFormat(ObjectFormat objectFormat, ReportDocument report, XmlWriter writer)
+		private void GetObjectFormat(ReportObject ro, ReportDocument report, XmlWriter writer)
 		{
 			WriteAndTraceStartElement(writer, "ObjectFormat");
 
-			writer.WriteAttributeString("CssClass", objectFormat.CssClass);
-			writer.WriteAttributeString("EnableCanGrow", objectFormat.EnableCanGrow.ToString());
-			writer.WriteAttributeString("EnableCloseAtPageBreak", objectFormat.EnableCloseAtPageBreak.ToString());
-			writer.WriteAttributeString("EnableKeepTogether", objectFormat.EnableKeepTogether.ToString());
-			writer.WriteAttributeString("EnableSuppress", objectFormat.EnableSuppress.ToString());
-			writer.WriteAttributeString("HorizontalAlignment", objectFormat.HorizontalAlignment.ToString());
 
-			GetObjectFormatConditionFormulas();
+
+			writer.WriteAttributeString("CssClass", ro.ObjectFormat.CssClass);
+			writer.WriteAttributeString("EnableCanGrow", ro.ObjectFormat.EnableCanGrow.ToString());
+			writer.WriteAttributeString("EnableCloseAtPageBreak", ro.ObjectFormat.EnableCloseAtPageBreak.ToString());
+			writer.WriteAttributeString("EnableKeepTogether", ro.ObjectFormat.EnableKeepTogether.ToString());
+			writer.WriteAttributeString("EnableSuppress", ro.ObjectFormat.EnableSuppress.ToString());
+			writer.WriteAttributeString("HorizontalAlignment", ro.ObjectFormat.HorizontalAlignment.ToString());
+
+
 
 			writer.WriteEndElement();
 		}
@@ -823,6 +825,8 @@ namespace RptToXml
 			{
 				WriteAndTraceStartElement(writer, reportObject.GetType().Name);
 
+				CRReportDefModel.ISCRReportObject rasrdm_ro = GetRASRDMReportObject(reportObject.Name, report);
+
 				writer.WriteAttributeString("Name", reportObject.Name);
 				writer.WriteAttributeString("Kind", reportObject.Kind.ToString());
 
@@ -858,7 +862,9 @@ namespace RptToXml
 				else if (reportObject is FieldHeadingObject)
 				{
 					var fh = (FieldHeadingObject)reportObject;
+					var rasrdm_fh = (CRReportDefModel.FieldHeadingObject)rasrdm_ro;
 					writer.WriteAttributeString("FieldObjectName", fh.FieldObjectName);
+					writer.WriteAttributeString("MaxNumberOfLines", rasrdm_fh.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", fh.Text);
 				}
 				else if (reportObject is FieldObject)
@@ -890,6 +896,8 @@ namespace RptToXml
 				else if (reportObject is TextObject)
 				{
 					var tobj = (TextObject)reportObject;
+					var rasrdm_tobj = (CRReportDefModel.TextObject)rasrdm_ro;
+					writer.WriteAttributeString("MaxNumberOfLines", rasrdm_tobj.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", tobj.Text);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
@@ -902,7 +910,11 @@ namespace RptToXml
 					GetBorderFormat(reportObject, report, writer);
 
 				if ((ShowFormatTypes & FormatTypes.ObjectFormat) == FormatTypes.ObjectFormat)
-					GetObjectFormat(reportObject.ObjectFormat, report, writer);
+					GetObjectFormat(reportObject, report, writer);
+
+
+				if (rasrdm_ro != null)
+					GetObjectFormatConditionFormulas(rasrdm_ro, writer);
 
 				writer.WriteEndElement();
 			}
