@@ -11,7 +11,7 @@ namespace RptToXml
 	{
 
 		#region Get ReportAppServer Objects
-		private CRReportDefModel.ISCRReportObject GetRASRDMReportObjectFromCRENGReportObject(string oname, ReportDocument report)
+		private CRReportDefModel.ISCRReportObject GetRASRDMReportObject(string oname, ReportDocument report)
 		{
 			CRReportDefModel.ISCRReportObject rdm;
 			if (report.IsSubreport)
@@ -108,7 +108,7 @@ namespace RptToXml
 			WriteAndTraceStartElement(writer, "SectionAreaConditionFormulas");
 			var cfs = Enum.GetValues(typeof(CRReportDefModel.CrSectionAreaFormatConditionFormulaTypeEnum));
 
-			//TODO: need to cut this down by Area.Kind to only shjow relevant attributes, i.e. Page Clamp is only valid on Page Footer. 
+			//TODO: need to cut this down by Area.Kind to only show relevant attributes, i.e. Page Clamp is only valid on Page Footer. 
 			foreach (CRReportDefModel.CrSectionAreaFormatConditionFormulaTypeEnum cf in cfs)
 			{
 				var formula = ro.Format.ConditionFormulas[cf];
@@ -130,9 +130,59 @@ namespace RptToXml
 			//TODO: throw new NotImplementedException();
 		}
 
-		private static void GetObjectFormatConditionFormulas()
+		private static void GetObjectFormatConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)
 		{
-			//TODO: throw new NotImplementedException();
+			WriteAndTraceStartElement(writer, "ObjectFormatConditionFormulas");
+
+			var cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableSuppress];
+			if (cf.Text != null)
+				writer.WriteAttributeString("EnableSuppress", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableKeepTogether];
+			if (cf.Text != null)
+				writer.WriteAttributeString("EnableKeepTogether", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableCloseAtPageBreak];
+			if (cf.Text != null)
+				writer.WriteAttributeString("EnableCloseAtPageBreak", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeHorizontalAlignment];
+			if (cf.Text != null)
+				writer.WriteAttributeString("HorizontalAlignment", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableCanGrow];
+			if (cf.Text != null)
+				writer.WriteAttributeString("EnableCanGrow", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeToolTipText];
+			if (cf.Text != null)
+				writer.WriteAttributeString("ToolTipText", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeRotation];
+			if (cf.Text != null)
+				writer.WriteAttributeString("Rotation", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeHyperlink];
+			if (cf.Text != null)
+				writer.WriteAttributeString("Hyperlink", cf.Text.ToString());
+			
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableSuppress];
+			if (cf.Text != null)
+				writer.WriteAttributeString("CssClass", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDisplayString];
+			if (cf.Text != null)
+				writer.WriteAttributeString("DisplayString", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDeltaX];
+			if (cf.Text != null)
+				writer.WriteAttributeString("DeltaX", cf.Text.ToString());
+
+			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDeltaWidth];
+			if (cf.Text != null)
+				writer.WriteAttributeString("DeltaWidth", cf.Text.ToString());
+
+			writer.WriteEndElement();
 		}
 
 		private static void GetTopNSortClassConditionFormulas()
