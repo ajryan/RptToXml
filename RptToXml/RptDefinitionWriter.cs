@@ -43,6 +43,7 @@ namespace RptToXml
 		public RptDefinitionWriter(ReportDocument value)
 		{
 			_report = value;
+			_rcd = _report.ReportClientDocument;
 		}
 
 		public void WriteToXml(System.IO.Stream output)
