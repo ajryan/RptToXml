@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Xml;
-using System.Text;
+
 using CrystalDecisions.CrystalReports.Engine;
+
 using CRDataDefModel = CrystalDecisions.ReportAppServer.DataDefModel;
 using CRReportDefModel = CrystalDecisions.ReportAppServer.ReportDefModel;
 
 namespace RptToXml
 {
-	public partial class RptDefinitionWriter : IDisposable
+	public partial class RptDefinitionWriter
 	{
-
 		#region Get ReportAppServer Objects
+
 		private CRReportDefModel.ISCRReportObject GetRASRDMReportObject(string oname, ReportDocument report)
 		{
-			CRReportDefModel.ISCRReportObject rdm;
+			CRReportDefModel.ISCRReportObject reportObj;
 			if (report.IsSubreport)
 			{
 				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
-				rdm = subrptClientDoc.ReportDefController.ReportDefinition.FindObjectByName(oname) as CRReportDefModel.ISCRReportObject;
+				reportObj = subrptClientDoc.ReportDefController.ReportDefinition.FindObjectByName(oname);
 			}
 			else
 			{
-				rdm = _rcd.ReportDefController.ReportDefinition.FindObjectByName(oname) as CRReportDefModel.ISCRReportObject;
+				reportObj = _rcd.ReportDefController.ReportDefinition.FindObjectByName(oname);
 			}
-			return rdm;
+			return reportObj;
 		}
 
 		private CRReportDefModel.Section GetRASRDMSectionObjectFromCRENGSectionObject(string sname, ReportDocument report)
 		{
-			CRReportDefModel.Section rdm;
+			CRReportDefModel.Section section;
 			if (report.IsSubreport)
 			{
 				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
-				rdm = subrptClientDoc.ReportDefController.ReportDefinition.FindSectionByName(sname) as CRReportDefModel.Section;
+				section = subrptClientDoc.ReportDefController.ReportDefinition.FindSectionByName(sname);
 			}
 			else
 			{
-				rdm = _rcd.ReportDefController.ReportDefinition.FindSectionByName(sname) as CRReportDefModel.Section;
+				section = _rcd.ReportDefController.ReportDefinition.FindSectionByName(sname);
 			}
-			return rdm;
+			return section;
 		}
 
 		private GroupAreaFormat GetRASDDMGroupAreaFormatObject(Group group, ReportDocument report)
@@ -46,12 +47,12 @@ namespace RptToXml
 			//TODO:  finish me, not sure how to reference GroupOptions object.  The GroupOptionsConditionFormulas
 			// has 2 forms, one is sort and group and the other is the collection that we are used to seeing.  It is confusing.
 			GroupAreaFormat gaf = null;
+
 			if (report.IsSubreport)
 			{
-				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				//var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
 				//var groups = subrptClientDoc.DataDefController.GroupController.FindGroup(fieldName);
 				//gaf = subrptClientDoc.ReportDefController.ReportDefinition.FindObjectByName();
-				
 			}
 			else
 			{
@@ -63,132 +64,104 @@ namespace RptToXml
 
 		private CRReportDefModel.PrintOptions GetRASRDMPrintOptionsObject(string name, ReportDocument report)
 		{
-			CRReportDefModel.PrintOptions rdm;
 			if (report.IsSubreport)
-				throw new NotImplementedException();
-			else
-				rdm = _rcd.ReportDocument.PrintOptions as CRReportDefModel.PrintOptions;
+				return null;
 
-			return rdm;
+			return _rcd.ReportDocument.PrintOptions;
 		}
+
 		#endregion Get ReportAppServer Objects
 
 		private static void GetBorderConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)
 		{
-			WriteAndTraceStartElement(writer, "BorderConditionFormulas");
+			writer.WriteStartElement("BorderConditionFormulas");
 			var cfs = Enum.GetValues(typeof(CRReportDefModel.CrBorderConditionFormulaTypeEnum));
 			foreach (CRReportDefModel.CrBorderConditionFormulaTypeEnum cf in cfs)
 			{
 				var formula = ro.Border.ConditionFormulas[cf];
-				var text = (formula.Text == null) ? "" : formula.Text.ToString();
-				var enumname = Enum.GetName(typeof(CRReportDefModel.CrBorderConditionFormulaTypeEnum), cf);
-				var shortenumname = enumname.Substring("crBorderConditionFormulaType".Length);
-				writer.WriteAttributeString(shortenumname, text);
+
+				if (!String.IsNullOrEmpty(formula.Text))
+					writer.WriteAttributeString(GetShortEnumName(cf), formula.Text);
 			}
 			writer.WriteEndElement();
 		}
 
 		private void GetPageMarginConditionFormulas(CRReportDefModel.PrintOptions po, XmlWriter writer)
 		{
-			WriteAndTraceStartElement(writer, "PageMarginConditionFormulas");
+			writer.WriteStartElement("PageMarginConditionFormulas");
 			var cfs = Enum.GetValues(typeof(CRReportDefModel.CrPageMarginConditionFormulaTypeEnum));
 			foreach (CRReportDefModel.CrPageMarginConditionFormulaTypeEnum cf in cfs)
 			{
 				var formula = po.PageMargins.PageMarginConditionFormulas[cf];
-				var text = (formula.Text == null) ? "" : formula.Text.ToString();
-				var enumname = Enum.GetName(typeof(CRReportDefModel.CrPageMarginConditionFormulaTypeEnum), cf);
-				var shortenumname = enumname.Substring("CrPageMarginConditionFormulaType".Length);
-				writer.WriteAttributeString(shortenumname, text);
+				if (!String.IsNullOrEmpty(formula.Text))
+					writer.WriteAttributeString(GetShortEnumName(cf), formula.Text);
 			}
 			writer.WriteEndElement();
 		}
 
 		private static void GetSectionAreaFormatConditionFormulas(CRReportDefModel.Section ro, XmlWriter writer)
 		{
-			WriteAndTraceStartElement(writer, "SectionAreaConditionFormulas");
+			writer.WriteStartElement("SectionAreaConditionFormulas");
 			var cfs = Enum.GetValues(typeof(CRReportDefModel.CrSectionAreaFormatConditionFormulaTypeEnum));
 
-			//TODO: need to cut this down by Area.Kind to only show relevant attributes, i.e. Page Clamp is only valid on Page Footer. 
+			//TODO: need to cut this down by Area.Kind to only show relevant attributes, i.e. Page Clamp is only valid on Page Footer.
 			foreach (CRReportDefModel.CrSectionAreaFormatConditionFormulaTypeEnum cf in cfs)
 			{
 				var formula = ro.Format.ConditionFormulas[cf];
-				var text = (formula.Text == null) ? "" : formula.Text.ToString();
-				var enumname = Enum.GetName(typeof(CRReportDefModel.CrSectionAreaFormatConditionFormulaTypeEnum), cf);
-				var shortenumname = enumname.Substring("crSectionAreaConditionFormulaType".Length);
-				writer.WriteAttributeString(shortenumname, text);
+				if (!String.IsNullOrEmpty(formula.Text))
+					writer.WriteAttributeString(GetShortEnumName(cf, "crSectionAreaConditionFormulaType"), formula.Text);
 			}
 			writer.WriteEndElement();
 		}
 
 		private static void GetGroupOptionsConditionFormulas(GroupOptions rdm_ro, XmlWriter writer)
 		{
-			//TODO: throw new NotImplementedException();
+			//TODO: not yet implemented
 		}
 
 		private static void GetFontColorConditionFormulas()
 		{
-			//TODO: throw new NotImplementedException();
+			//TODO: not yet implemented
 		}
 
 		private static void GetObjectFormatConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)
 		{
-			WriteAndTraceStartElement(writer, "ObjectFormatConditionFormulas");
+			writer.WriteStartElement("ObjectFormatConditionFormulas");
 
-			var cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableSuppress];
-			if (cf.Text != null)
-				writer.WriteAttributeString("EnableSuppress", cf.Text.ToString());
+			foreach (var formulaTypeObj in Enum.GetValues(typeof(CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum)))
+			{
+				var formulaType = (CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum)formulaTypeObj;
 
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableKeepTogether];
-			if (cf.Text != null)
-				writer.WriteAttributeString("EnableKeepTogether", cf.Text.ToString());
+				var cf = ro.Format.ConditionFormulas[formulaType];
 
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableCloseAtPageBreak];
-			if (cf.Text != null)
-				writer.WriteAttributeString("EnableCloseAtPageBreak", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeHorizontalAlignment];
-			if (cf.Text != null)
-				writer.WriteAttributeString("HorizontalAlignment", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableCanGrow];
-			if (cf.Text != null)
-				writer.WriteAttributeString("EnableCanGrow", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeToolTipText];
-			if (cf.Text != null)
-				writer.WriteAttributeString("ToolTipText", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeRotation];
-			if (cf.Text != null)
-				writer.WriteAttributeString("Rotation", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeHyperlink];
-			if (cf.Text != null)
-				writer.WriteAttributeString("Hyperlink", cf.Text.ToString());
-			
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeEnableSuppress];
-			if (cf.Text != null)
-				writer.WriteAttributeString("CssClass", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDisplayString];
-			if (cf.Text != null)
-				writer.WriteAttributeString("DisplayString", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDeltaX];
-			if (cf.Text != null)
-				writer.WriteAttributeString("DeltaX", cf.Text.ToString());
-
-			cf = ro.Format.ConditionFormulas[CRReportDefModel.CrObjectFormatConditionFormulaTypeEnum.crObjectFormatConditionFormulaTypeDeltaWidth];
-			if (cf.Text != null)
-				writer.WriteAttributeString("DeltaWidth", cf.Text.ToString());
+				if (!String.IsNullOrEmpty(cf.Text))
+					writer.WriteAttributeString(GetShortEnumName(formulaType), cf.Text);
+			}
 
 			writer.WriteEndElement();
 		}
 
 		private static void GetTopNSortClassConditionFormulas()
 		{
-			//TODO: throw new NotImplementedException();
+			//TODO: not yet implemented
 		}
 
+		private static string GetShortEnumName<T>(T enumValue, string prefix = null) where T : struct
+		{
+			if (prefix == null)
+			{
+				string typeName = typeof(T).Name;
+				prefix = typeName.EndsWith("Enum", StringComparison.OrdinalIgnoreCase)
+					? typeName.Substring(0, typeName.Length - 4)
+					: typeName;
+			}
+
+			string valueString = enumValue.ToString();
+
+			if (valueString.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+				valueString = valueString.Substring(prefix.Length);
+
+			return valueString;
+		}
 	}
 }
