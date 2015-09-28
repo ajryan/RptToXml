@@ -38,11 +38,12 @@ namespace RptToXml
 			else
 			{
 				var directory = Path.GetDirectoryName(rptPathArg);
-				if (!String.IsNullOrEmpty(directory))
-				{
-					var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
-					rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
-				}
+                if (String.IsNullOrEmpty(directory))
+                {
+                    directory = ".";
+                }
+                var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
+                rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
 			}
 
 			if (rptPaths.Count == 0)
