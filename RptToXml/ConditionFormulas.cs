@@ -138,6 +138,15 @@ namespace RptToXml
 					writer.WriteAttributeString(GetShortEnumName(formulaType), cf.Text);
 			}
 
+            if (ro is CRReportDefModel.PictureObject)
+            {
+                var ro_p = (CRReportDefModel.PictureObject)ro;
+                var cf = ro_p.GraphicLocationFormula;
+
+                if (!String.IsNullOrEmpty(cf.Text))
+                    writer.WriteAttributeString("GraphicLocation", cf.Text);
+            }
+
 			writer.WriteEndElement();
 		}
 
