@@ -470,7 +470,7 @@ namespace RptToXml
 				{
 					var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
 
-					writer.WriteAttributeString("AllowCustomCurrentValues", ddm_pf.AllowCustomCurrentValues.ToString());
+					writer.WriteAttributeString("AllowCustomCurrentValues", (ddm_pf == null ? false : ddm_pf.AllowCustomCurrentValues).ToString());
 					writer.WriteAttributeString("EditMask", pf.EditMask);
 					writer.WriteAttributeString("EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
 					writer.WriteAttributeString("EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
@@ -510,18 +510,20 @@ namespace RptToXml
 					writer.WriteEndElement();
 
 					writer.WriteStartElement("ParameterInitialValues");
-					if (ddm_pf.InitialValues.Count > 0)
+					if (ddm_pf != null)
 					{
-						foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
+						if (ddm_pf.InitialValues.Count > 0)
 						{
-							writer.WriteStartElement("ParameterInitialValue");
-							CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
-							writer.WriteAttributeString("Value", pdv.Value.ToString());
-							writer.WriteEndElement();
+							foreach (CRDataDefModel.ParameterFieldValue pv in ddm_pf.InitialValues)
+							{
+								writer.WriteStartElement("ParameterInitialValue");
+								CRDataDefModel.ParameterFieldDiscreteValue pdv = (CRDataDefModel.ParameterFieldDiscreteValue)pv;
+								writer.WriteAttributeString("Value", pdv.Value.ToString());
+								writer.WriteEndElement();
+							}
 						}
 					}
 					writer.WriteEndElement();
-
 
 					writer.WriteStartElement("ParameterCurrentValues");
 					if (pf.CurrentValues.Count > 0)
