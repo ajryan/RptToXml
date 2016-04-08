@@ -716,10 +716,6 @@ namespace RptToXml
 			writer.WriteAttributeString("Underline", font.Underline.ToString());
 			writer.WriteAttributeString("Unit", font.Unit.ToString());
 
-			// TODO: not yet implemented
-			//if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-			//	GetFontColorConditionFormulas();
-
 			writer.WriteEndElement();
 		}
 
@@ -872,7 +868,8 @@ namespace RptToXml
 				else if (reportObject is FieldObject)
 				{
 					var fo = (FieldObject)reportObject;
-
+					var rasrdm_fo = (CRReportDefModel.FieldObject)rasrdm_ro;
+							
 					if (fo.DataSource != null)
 						writer.WriteAttributeString("DataSource", fo.DataSource.FormulaName);
 
@@ -880,20 +877,27 @@ namespace RptToXml
 						GetColorFormat(fo.Color, writer);
 
 					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+					{
 						GetFontFormat(fo.Font, report, writer);
+						GetFontColorConditionFormulas(rasrdm_fo.FontColor, writer);
+					}
 
 				}
 				else if (reportObject is TextObject)
 				{
 					var tobj = (TextObject)reportObject;
 					var rasrdm_tobj = (CRReportDefModel.TextObject)rasrdm_ro;
+
 					writer.WriteAttributeString("MaxNumberOfLines", rasrdm_tobj.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", tobj.Text);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
 						GetColorFormat(tobj.Color, writer);
 					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+					{
 						GetFontFormat(tobj.Font, report, writer);
+						GetFontColorConditionFormulas(rasrdm_tobj.FontColor, writer);
+					}
 				}
 
 				if ((ShowFormatTypes & FormatTypes.Border) == FormatTypes.Border)

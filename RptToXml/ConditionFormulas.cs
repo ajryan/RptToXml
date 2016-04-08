@@ -119,9 +119,21 @@ namespace RptToXml
 			//TODO: not yet implemented
 		}
 
-		private static void GetFontColorConditionFormulas()
+		private static void GetFontColorConditionFormulas(CRReportDefModel.FontColor fco, XmlWriter writer)
 		{
-			//TODO: not yet implemented
+			writer.WriteStartElement("FontColorConditionFormulas");
+
+			foreach (var fontColorTypeObj in Enum.GetValues(typeof(CRReportDefModel.CrFontColorConditionFormulaTypeEnum)))
+			{
+				var fontColorType = (CRReportDefModel.CrFontColorConditionFormulaTypeEnum)fontColorTypeObj;
+
+				var cf = fco.ConditionFormulas[fontColorType];
+
+				if (!String.IsNullOrEmpty(cf.Text))
+					writer.WriteAttributeString(GetShortEnumName(fontColorType), cf.Text);
+			}
+
+			writer.WriteEndElement();
 		}
 
 		private static void GetObjectFormatConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)
