@@ -864,6 +864,15 @@ namespace RptToXml
 					writer.WriteAttributeString("FieldObjectName", fh.FieldObjectName);
 					writer.WriteAttributeString("MaxNumberOfLines", rasrdm_fh.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", fh.Text);
+
+					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+						GetColorFormat(fh.Color, writer);
+
+					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+					{
+						GetFontFormat(fh.Font, report, writer);
+						GetFontColorConditionFormulas(rasrdm_fh.FontColor, writer);
+					}
 				}
 				else if (reportObject is FieldObject)
 				{
