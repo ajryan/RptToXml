@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
@@ -373,7 +374,7 @@ namespace RptToXml
 			writer.WriteEndElement();
 
 			writer.WriteStartElement("FormulaFieldDefinitions");
-			foreach (var field in report.DataDefinition.FormulaFields)
+			foreach (var field in report.DataDefinition.FormulaFields.OfType<FieldDefinition>().OrderBy(field => field.FormulaName))
 				GetFieldObject(field, report, writer);
 			writer.WriteEndElement();
 
