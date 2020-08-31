@@ -39,65 +39,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.Engine.13.0.3501\lib\net20\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.ClientDoc.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.CommLayer.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.CommLayer.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.CommonControls.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.CommonControls.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.CommonObjectModel.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.CommonObjectModel.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.Controllers.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.Controllers.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.CubeDefModel.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.CubeDefModel.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.DataDefModel.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.DataDefModel.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.DataSetConversion.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
-    </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.ObjectFactory.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.ObjectFactory.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.Prompting, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.Prompting.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.Prompting.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.Prompting, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.ReportDefModel.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.ReportDefModel.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.ReportAppServer.XmlSerialize.13.0.3501\lib\net20\CrystalDecisions.ReportAppServer.XmlSerialize.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <HintPath>packages\CrystalReports.Shared.13.0.3501\lib\net20\CrystalDecisions.Shared.dll</HintPath>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="log4net, Version=2.0.9.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.9\lib\net40\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMcdf, Version=1.5.4.22637, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\OpenMcdf.1.5.4.22637\lib\OpenMcdf.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="OpenMcdf, Version=2.2.1.5, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <HintPath>packages\OpenMcdf.2.2.1.6\lib\net40\OpenMcdf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
