@@ -21,8 +21,8 @@ RptToXml references Crystal Reports assemblies. The easiest way to get them onto
 
 Install the framework that works best for your OS:
 
-SAP Crystal Reports for Visual Studio (SP##) runtime engine for .NET framework MSI (32-bit)
-SAP Crystal Reports for Visual Studio (SP##) runtime engine for .NET framework MSI (64-bit)
+- SAP Crystal Reports for Visual Studio (SP##) runtime engine for .NET framework MSI (32-bit)
+- SAP Crystal Reports for Visual Studio (SP##) runtime engine for .NET framework MSI (64-bit)
 
 The solution will build with VS2012 or higher. Express editions have not been tested but should work.
 
