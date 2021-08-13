@@ -125,6 +125,7 @@ namespace RptToXml
 
 			GetDatabase(report, writer);
 			GetDataDefinition(report, writer);
+			GetCustomFunctions(report, writer);
 			GetReportDefinition(report, writer);
 
 			writer.WriteEndElement();
@@ -234,6 +235,38 @@ namespace RptToXml
 				writer.WriteEndElement();
 
 				writer.WriteEndElement();
+			}
+
+			writer.WriteEndElement();
+		}
+
+		private void GetCustomFunctions(ReportDocument report, XmlWriter writer)
+		{
+			writer.WriteStartElement("CustomFunctions");
+
+			CRDataDefModel.CustomFunctions funcs;
+			if (!report.IsSubreport)
+			{
+				funcs = report.ReportClientDocument.CustomFunctionController.GetCustomFunctions();
+			}
+			else
+			{
+				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				//funcs = subrptClientDoc.CustomFunctionController.GetCustomFunctions();
+				funcs = null;
+			}
+
+			if (funcs != null)
+			{
+				foreach (CRDataDefModel.CustomFunction func in funcs)
+				{
+					writer.WriteStartElement("CustomFunction");
+					writer.WriteAttributeString("Name", func.Name);
+					writer.WriteAttributeString("Syntax", func.Syntax.ToString());
+					writer.WriteElementString("Text", func.Text); // an element so line breaks are literal
+
+					writer.WriteEndElement();
+				}
 			}
 
 			writer.WriteEndElement();
