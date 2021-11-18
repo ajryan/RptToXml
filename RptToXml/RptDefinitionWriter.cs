@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using System.Runtime.ExceptionServices;
 
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.ReportAppServer.ClientDoc;
@@ -439,6 +440,7 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
+		[HandleProcessCorruptedStateExceptionsAttribute]
 		private void GetFieldObject(Object fo, ReportDocument report, XmlWriter writer)
 		{
 			if (fo is DatabaseFieldDefinition)
@@ -474,15 +476,20 @@ namespace RptToXml
 				var gnf = (GroupNameFieldDefinition)fo;
 
 				writer.WriteStartElement("GroupNameFieldDefinition");
-
-				writer.WriteAttributeString("FormulaName", gnf.FormulaName);
-				writer.WriteAttributeString("Group", gnf.Group.ToString());
-				writer.WriteAttributeString("GroupNameFieldName", gnf.GroupNameFieldName);
-				writer.WriteAttributeString("Kind", gnf.Kind.ToString());
-				writer.WriteAttributeString("Name", gnf.Name);
-				writer.WriteAttributeString("NumberOfBytes", gnf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
-				writer.WriteAttributeString("ValueType", gnf.ValueType.ToString());
-
+				try 
+				{
+					writer.WriteAttributeString("FormulaName", gnf.FormulaName);
+					writer.WriteAttributeString("Group", gnf.Group.ToString());
+					writer.WriteAttributeString("GroupNameFieldName", gnf.GroupNameFieldName);
+					writer.WriteAttributeString("Kind", gnf.Kind.ToString());
+					writer.WriteAttributeString("Name", gnf.Name);
+					writer.WriteAttributeString("NumberOfBytes", gnf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
+					writer.WriteAttributeString("ValueType", gnf.ValueType.ToString());
+				}
+				catch( Exception e)
+				{
+					Console.WriteLine($"Error loading formula for group '{gnf.GroupNameFieldName}', {e}");
+				}
 			}
 			else if (fo is ParameterFieldDefinition)
 			{
