@@ -187,13 +187,19 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
+		[HandleProcessCorruptedStateExceptionsAttribute]
 		private void GetSubreports(ReportDocument report, XmlWriter writer)
 		{
 			writer.WriteStartElement("SubReports");
 
+			try { 
 			foreach (ReportDocument subreport in report.Subreports)
 				ProcessReport(subreport, writer);
-
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Error loading subpreport, {e}");
+			}
 			writer.WriteEndElement();
 		}
 
@@ -418,8 +424,13 @@ namespace RptToXml
 			writer.WriteEndElement();
 
 			writer.WriteStartElement("ParameterFieldDefinitions");
-			foreach (var field in report.DataDefinition.ParameterFields)
-				GetFieldObject(field, report, writer);
+			try { 
+				foreach (var field in report.DataDefinition.ParameterFields)
+					GetFieldObject(field, report, writer);
+			} catch( Exception e)
+			{
+				Console.WriteLine($"Error processing ParameterFieldDefinitions, {e}");
+			}
 			writer.WriteEndElement();
 
 			writer.WriteStartElement("RunningTotalFieldDefinitions");
