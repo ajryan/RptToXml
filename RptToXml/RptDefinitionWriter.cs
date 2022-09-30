@@ -127,6 +127,7 @@ namespace RptToXml
 			GetDatabase(report, writer);
 			GetDataDefinition(report, writer);
 			GetCustomFunctions(report, writer);
+			GetSubReportsLinks(report, writer);
 			GetReportDefinition(report, writer);
 
 			writer.WriteEndElement();
@@ -185,6 +186,27 @@ namespace RptToXml
 				GetPageMarginConditionFormulas(rdmPrintOptions, writer);
 
 			writer.WriteEndElement();
+		}
+
+		private void GetSubReportsLinks(ReportDocument report, XmlWriter writer)
+		{
+			if (report.IsSubreport)
+			{
+				writer.WriteStartElement("SubReportLinks");
+				CRReportDefModel.SubreportLinks subReportLinks = _report.ReportClientDocument.SubreportController.GetSubreportLinks(report.Name);
+
+				if (subReportLinks != null)
+					foreach (CRReportDefModel.SubreportLink link in subReportLinks)
+					{
+						writer.WriteStartElement("SubReportLink");
+						writer.WriteAttributeString("LinkedParameterName", link.LinkedParameterName);
+						writer.WriteAttributeString("MainReportFieldName", link.MainReportFieldName);
+						writer.WriteAttributeString("SubreportFieldName", link.SubreportFieldName);
+						writer.WriteEndElement();
+					}
+
+				writer.WriteEndElement();
+			}
 		}
 
 		[HandleProcessCorruptedStateExceptionsAttribute]
@@ -884,8 +906,14 @@ namespace RptToXml
 				writer.WriteAttributeString("Left", reportObject.Left.ToString(CultureInfo.InvariantCulture));
 				writer.WriteAttributeString("Width", reportObject.Width.ToString(CultureInfo.InvariantCulture));
 				writer.WriteAttributeString("Height", reportObject.Height.ToString(CultureInfo.InvariantCulture));
-
-				if (reportObject is BoxObject)
+				if (reportObject is SubreportObject)
+				{
+					var srobj = (SubreportObject)reportObject;
+					writer.WriteAttributeString("SubreportName", srobj.SubreportName);
+					writer.WriteAttributeString("EnableOnDemand", srobj.EnableOnDemand.ToString(CultureInfo.InvariantCulture));
+					
+				}
+				else if (reportObject is BoxObject)
 				{
 					var bo = (BoxObject)reportObject;
 					writer.WriteAttributeString("Bottom", bo.Bottom.ToString(CultureInfo.InvariantCulture));
