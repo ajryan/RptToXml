@@ -12,44 +12,48 @@ namespace RptToXml
 		{
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Usage: RptToXml.exe <RPT filename | wildcard> [outputfilename]");
+				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename]");
 				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
 				return;
 			}
 
 			string rptPathArg = args[0];
-			bool wildCard = rptPathArg.Contains("*");
-			if (!wildCard && !ReportFilenameValid(rptPathArg))
-				return;
-
-			if (wildCard && args.Length > 1)
-			{
-				Console.WriteLine("Output filename may not be specified with wildcard.");
-				return;
-			}
-
-			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-
 			var rptPaths = new List<string>();
-			if (!wildCard)
+
+			if ("-r".Equals(rptPathArg, StringComparison.InvariantCultureIgnoreCase))
 			{
-				rptPaths.Add(rptPathArg);
+				if (args.Length > 1)
+				{
+					Console.WriteLine("Output filename may not be specified with -r .");
+					return;
+				}
+				recursiveFileList(rptPaths, ".");
+			}
+			else if (rptPathArg.Contains("*"))
+			{
+				if (args.Length > 1)
+				{
+					Console.WriteLine("Output filename may not be specified with wildcard.");
+					return;
+				}
+				var directory = Path.GetDirectoryName(rptPathArg);
+				if (String.IsNullOrEmpty(directory))
+				{
+					directory = ".";
+				}
+				var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
+				rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
+				if (rptPaths.Count == 0)
+				{
+					Trace.WriteLine("No reports matched the wildcard.");
+				}
 			}
 			else
 			{
-				var directory = Path.GetDirectoryName(rptPathArg);
-                if (String.IsNullOrEmpty(directory))
-                {
-                    directory = ".";
-                }
-                var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
-                rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
+				rptPaths.Add(rptPathArg);
 			}
+			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-			if (rptPaths.Count == 0)
-			{
-				Trace.WriteLine("No reports matched the wildcard.");
-			}
 
 			foreach (string rptPath in rptPaths)
 			{
@@ -64,6 +68,17 @@ namespace RptToXml
 			}
 		}
 
+		static void recursiveFileList(List<string> list, string directory)
+		{
+			foreach (string f in Directory.GetFiles(directory, "*.rpt"))
+			{
+				list.Add(f);
+			}
+			foreach (string d in Directory.GetDirectories(directory))
+			{
+				recursiveFileList(list, d);
+			}
+		}
 		static bool ReportFilenameValid(string rptPath)
 		{
 			string extension = Path.GetExtension(rptPath);
