@@ -13,10 +13,11 @@ namespace RptToXml
 			if (args.Length < 1)
 			{
 				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename]");
+				Console.WriteLine("       -r : recursively convert all rpt files in current directory and sub directories");
 				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
 				return;
 			}
-
+			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 			string rptPathArg = args[0];
 			var rptPaths = new List<string>();
 
@@ -52,7 +53,7 @@ namespace RptToXml
 			{
 				rptPaths.Add(rptPathArg);
 			}
-			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+			
 
 
 			foreach (string rptPath in rptPaths)
