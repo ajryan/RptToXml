@@ -27,4 +27,9 @@ RptToXml.exe path/to/report_name.rpt path/to/output.xml
 
 The solution will build with VS2012 or higher. Express editions have not been tested but should work.
 
+Install the SAP pacakge for Visual Studio:
+
+- SAP Crystal Reports for Visual Studio (SP##) installation package for Microsoft Visual Studio IDE (VS 20## and above or below)
+
+
 Find the executable `RptToXml.exe` in ```RptToXml/bin/<where did you build to?>``` after building the solution in Visual Studio.
