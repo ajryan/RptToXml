@@ -85,6 +85,11 @@ namespace RptToXml
 			string myValue = value == null ? null : CompiledRegexp.Replace(value, "");
 			writer.WriteAttributeString(name, myValue);
 		}
+		private static void WriteString(XmlWriter writer, string value)
+		{
+			string myValue = value == null ? null : CompiledRegexp.Replace(value, "");
+			writer.WriteString(myValue);
+		}
 		//This is a recursive method.  GetSubreports() calls it.
 		private void ProcessReport(ReportDocument report, XmlWriter writer)
 		{
@@ -362,7 +367,7 @@ namespace RptToXml
 			{
 				var cmdTable = commandTable;
 				writer.WriteStartElement("Command");
-				writer.WriteString(cmdTable.CommandText);
+				WriteString(writer, cmdTable.CommandText);
 				writer.WriteEndElement();
 			}
 
@@ -515,7 +520,7 @@ namespace RptToXml
 				WriteAttributeString(writer, "Name", ff.Name);
 				WriteAttributeString(writer, "NumberOfBytes", ff.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "ValueType", ff.ValueType.ToString());
-				writer.WriteString(ff.Text);
+				WriteString(writer, ff.Text);
 
 			}
 			else if (fo is GroupNameFieldDefinition)
