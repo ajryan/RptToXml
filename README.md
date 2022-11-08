@@ -20,7 +20,12 @@ Install the SAP frameworks (probably need 32-bit and 64-bit):
 Run the executable from the command line with
 
 ```sh
+# process a single file
 RptToXml.exe path/to/report_name.rpt path/to/output.xml
+
+# process a directory of reports
+cd path/to/reports
+RptToXml.exe -r
 ```
 
 ## Building From Source
