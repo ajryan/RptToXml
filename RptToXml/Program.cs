@@ -8,7 +8,6 @@ namespace RptToXml
 {
 	class Program
 	{
-
 		static void Main(string[] args)
 		{
 			if (args.Length < 1)
@@ -59,8 +58,6 @@ namespace RptToXml
 				rptPaths.Add(rptPathArg);
 			}
 
-
-
 			foreach (string rptPath in rptPaths)
 			{
 				try
@@ -84,7 +81,6 @@ namespace RptToXml
 				}
 			}
 		}
-		
 		static void recursiveFileList(List<string> list, string directory)
 		{
 			foreach (string f in Directory.GetFiles(directory, "*.rpt"))
