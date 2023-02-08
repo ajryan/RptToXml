@@ -12,7 +12,7 @@ namespace RptToXml
 		{
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename]");
+				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors]");
 				Console.WriteLine("       -r : recursively convert all rpt files in current directory and sub directories");
 				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
 				return;
@@ -20,10 +20,14 @@ namespace RptToXml
 			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 			string rptPathArg = args[0];
 			var rptPaths = new List<string>();
+			int ignoreErrFlag = 0;
+
+			if (args.Contains("--ignore-errors"))
+				ignoreErrFlag = 1;
 
 			if ("-r".Equals(rptPathArg, StringComparison.InvariantCultureIgnoreCase))
 			{
-				if (args.Length > 1)
+				if (args.Length > 1 + ignoreErrFlag)
 				{
 					Console.WriteLine("Output filename may not be specified with -r .");
 					return;
@@ -32,7 +36,7 @@ namespace RptToXml
 			}
 			else if (rptPathArg.Contains("*"))
 			{
-				if (args.Length > 1)
+				if (args.Length > 1 + ignoreErrFlag)
 				{
 					Console.WriteLine("Output filename may not be specified with wildcard.");
 					return;
@@ -53,22 +57,30 @@ namespace RptToXml
 			{
 				rptPaths.Add(rptPathArg);
 			}
-			
-
 
 			foreach (string rptPath in rptPaths)
 			{
-				Trace.WriteLine("Dumping " + rptPath);
-
-				using (var writer = new RptDefinitionWriter(rptPath))
+				try
 				{
-					string xmlPath = args.Length > 1 ?
-						args[1] : Path.ChangeExtension(rptPath, "xml");
-					writer.WriteToXml(xmlPath);
+					Trace.WriteLine("Dumping " + rptPath);
+
+					using (var writer = new RptDefinitionWriter(rptPath))
+					{
+						string xmlPath = args.Length > 1 + ignoreErrFlag ?
+							args[1] : Path.ChangeExtension(rptPath, "xml");
+						writer.WriteToXml(xmlPath);
+					}
+
+				}
+				catch (Exception ex)
+				{
+					if (ignoreErrFlag == 1)
+						Trace.WriteLine(ex.Message);
+					else
+						throw ex;
 				}
 			}
 		}
-
 		static void recursiveFileList(List<string> list, string directory)
 		{
 			foreach (string f in Directory.GetFiles(directory, "*.rpt"))
