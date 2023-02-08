@@ -12,7 +12,7 @@ namespace RptToXml
 		{
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors]");
+				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors] [--stdout]");
 				Console.WriteLine("       -r : recursively convert all rpt files in current directory and sub directories");
 				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
 				return;
@@ -21,9 +21,13 @@ namespace RptToXml
 			string rptPathArg = args[0];
 			var rptPaths = new List<string>();
 			int ignoreErrFlag = 0;
+			int stdOut = 0;
 
 			if (args.Contains("--ignore-errors"))
 				ignoreErrFlag = 1;
+
+			if (args.Contains("--stdout"))
+				stdOut = 1;
 
 			if ("-r".Equals(rptPathArg, StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -62,9 +66,11 @@ namespace RptToXml
 			{
 				try
 				{
-					Trace.WriteLine("Dumping " + rptPath);
+					if(stdOut == 0)
+						Trace.WriteLine("Dumping " + rptPath);
+					
 
-					using (var writer = new RptDefinitionWriter(rptPath))
+					using (var writer = new RptDefinitionWriter(rptPath, stdOut))
 					{
 						string xmlPath = args.Length > 1 + ignoreErrFlag ?
 							args[1] : Path.ChangeExtension(rptPath, "xml");

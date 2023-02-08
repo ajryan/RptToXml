@@ -29,9 +29,11 @@ namespace RptToXml
 		private CompoundFile _oleCompoundFile;
 
 		private readonly bool _createdReport;
+		private readonly int _stdOut;
 
-		public RptDefinitionWriter(string filename)
+		public RptDefinitionWriter(string filename, int stdOut)
 		{
+			_stdOut = stdOut;
 			_createdReport = true;
 			_report = new ReportDocument();
 			_report.Load(filename, OpenReportMethod.OpenReportByTempCopy);
@@ -39,13 +41,29 @@ namespace RptToXml
 
 			_oleCompoundFile = new CompoundFile(filename);
 
-			Trace.WriteLine("Loaded report");
+			if (stdOut == 0)
+				Trace.WriteLine("Loaded report");
 		}
 
 		public RptDefinitionWriter(ReportDocument value)
 		{
 			_report = value;
 			_rcd = _report.ReportClientDocument;
+		}
+
+		public void WriteToXml()
+		{
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.CheckCharacters = true;
+			settings.Encoding = Encoding.UTF8;
+			settings.Indent = true;
+
+			StringBuilder stringOutput = new StringBuilder();
+			using (XmlWriter writer = XmlWriter.Create(stringOutput, settings))
+			{
+				WriteToXml(writer);
+			}
+			Trace.Write(stringOutput.ToString());
 		}
 
 		public void WriteToXml(System.IO.Stream output)
@@ -63,13 +81,20 @@ namespace RptToXml
 
 		public void WriteToXml(string targetXmlPath)
 		{
+			if (_stdOut == 1 )
+			{
+				WriteToXml();
+			}
+			else { 
 			WriteToXml(System.IO.File.Create(targetXmlPath));
+			}
 		}
 
 		public void WriteToXml(XmlWriter writer)
 		{
-			Trace.WriteLine("Writing to XML");
-
+			if (_stdOut == 0)
+				Trace.WriteLine("Writing to XML");
+			
 			writer.WriteStartDocument();
 			ProcessReport(_report, writer);
 			writer.WriteEndDocument();
@@ -96,11 +121,13 @@ namespace RptToXml
 			writer.WriteStartElement("Report");
 
 			WriteAttributeString(writer, "Name", report.Name);
-			Trace.WriteLine("Writing report " + report.Name);
+			if (_stdOut == 0)
+				Trace.WriteLine("Writing report " + report.Name);
 
 			if (!report.IsSubreport)
 			{
-				Trace.WriteLine("Writing header info");
+				if (_stdOut == 0)
+					Trace.WriteLine("Writing header info");
 
 				WriteAttributeString(writer, "FileName", report.FileName.Replace("rassdk://", ""));
 				WriteAttributeString(writer, "HasSavedData", report.HasSavedData.ToString());
