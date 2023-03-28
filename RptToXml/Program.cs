@@ -60,25 +60,28 @@ namespace RptToXml
 
 			foreach (string rptPath in rptPaths)
 			{
-				try
-				{
-					Trace.WriteLine("Dumping " + rptPath);
+				string xmlPath = args.Length > 1 + ignoreErrFlag ?
+					args[1] : Path.ChangeExtension(rptPath, "xml");
+				DumpFile(rptPath, xmlPath, ignoreErrFlag == 1);
+			}
+		}
+		static void DumpFile(string rptPath, string xmlPath, bool ignoreErr)
+		{
+			try
+			{
+				Trace.WriteLine("Dumping " + rptPath);
 
-					using (var writer = new RptDefinitionWriter(rptPath))
-					{
-						string xmlPath = args.Length > 1 + ignoreErrFlag ?
-							args[1] : Path.ChangeExtension(rptPath, "xml");
-						writer.WriteToXml(xmlPath);
-					}
-
-				}
-				catch (Exception ex)
+				using (var writer = new RptDefinitionWriter(rptPath))
 				{
-					if (ignoreErrFlag == 1)
-						Trace.WriteLine(ex.Message);
-					else
-						throw ex;
+					writer.WriteToXml(xmlPath);
 				}
+			}
+			catch (Exception ex)
+			{
+				if (ignoreErr)
+					Trace.WriteLine(ex.Message);
+				else
+					throw ex;
 			}
 		}
 		static void recursiveFileList(List<string> list, string directory)
