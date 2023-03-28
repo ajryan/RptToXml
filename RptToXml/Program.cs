@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RptToXml
 {
@@ -58,12 +59,12 @@ namespace RptToXml
 				rptPaths.Add(rptPathArg);
 			}
 
-			foreach (string rptPath in rptPaths)
+			Parallel.ForEach(rptPaths, rptPath =>
 			{
 				string xmlPath = args.Length > 1 + ignoreErrFlag ?
 					args[1] : Path.ChangeExtension(rptPath, "xml");
 				DumpFile(rptPath, xmlPath, ignoreErrFlag == 1);
-			}
+			});
 		}
 		static void DumpFile(string rptPath, string xmlPath, bool ignoreErr)
 		{
