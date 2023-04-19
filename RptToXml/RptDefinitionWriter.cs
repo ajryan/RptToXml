@@ -29,9 +29,9 @@ namespace RptToXml
 		private CompoundFile _oleCompoundFile;
 
 		private readonly bool _createdReport;
-		private readonly int _stdOut;
+		private readonly bool _stdOut;
 
-		public RptDefinitionWriter(string filename, int stdOut)
+		public RptDefinitionWriter(string filename, bool stdOut)
 		{
 			_stdOut = stdOut;
 			_createdReport = true;
@@ -41,7 +41,7 @@ namespace RptToXml
 
 			_oleCompoundFile = new CompoundFile(filename);
 
-			if (stdOut == 0)
+			if (!stdOut)
 				Trace.WriteLine("Loaded report");
 		}
 
@@ -81,7 +81,7 @@ namespace RptToXml
 
 		public void WriteToXml(string targetXmlPath)
 		{
-			if (_stdOut == 1 )
+			if (_stdOut)
 			{
 				WriteToXml();
 			}
@@ -92,7 +92,7 @@ namespace RptToXml
 
 		public void WriteToXml(XmlWriter writer)
 		{
-			if (_stdOut == 0)
+			if (!_stdOut)
 				Trace.WriteLine("Writing to XML");
 			
 			writer.WriteStartDocument();
@@ -121,12 +121,12 @@ namespace RptToXml
 			writer.WriteStartElement("Report");
 
 			WriteAttributeString(writer, "Name", report.Name);
-			if (_stdOut == 0)
+			if (!_stdOut)
 				Trace.WriteLine("Writing report " + report.Name);
 
 			if (!report.IsSubreport)
 			{
-				if (_stdOut == 0)
+				if (!_stdOut)
 					Trace.WriteLine("Writing header info");
 
 				WriteAttributeString(writer, "FileName", report.FileName.Replace("rassdk://", ""));
