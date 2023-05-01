@@ -4,6 +4,7 @@ using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RptToXml
 {
@@ -77,41 +78,55 @@ namespace RptToXml
                 return 1;
             }
 
-            foreach (string rptPath in rptPaths)
-            {
-                if (!File.Exists(rptPath))
+            int exitCode = 0;
+            Parallel.ForEach(
+                rptPaths,
+                stdOut ? new ParallelOptions { MaxDegreeOfParallelism = 1 } : new ParallelOptions(),
+                rptPath =>
                 {
-                    Console.WriteLine($"{rptPath} does not exist.");
-                    return 1;
-                }
-
-                try
-                {
-                    if (!stdOut)
+                    if (!File.Exists(rptPath))
                     {
-                        Trace.WriteLine("Dumping " + rptPath);
+                        Console.WriteLine($"{rptPath} does not exist.");
+                        exitCode = 1;
+                        return;
                     }
 
-                    using (var writer = new RptDefinitionWriter(rptPath, stdOut))
+                    try
                     {
-                        string xmlPath = string.IsNullOrEmpty(outputFilename) ? Path.ChangeExtension(rptPath, "xml") : outputFilename;
-                        writer.WriteToXml(xmlPath);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ignoreErrors)
-                    {
-                        Trace.WriteLine(ex.Message);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
+                        if (!stdOut)
+                        {
+                            Trace.WriteLine("Dumping " + rptPath);
+                        }
 
-            return 0;
+                        using (var writer = new RptDefinitionWriter(rptPath, stdOut))
+                        {
+                            if (stdOut)
+                            {
+                                writer.WriteToXml();
+                            }
+                            else
+                            {
+                                string xmlPath = string.IsNullOrEmpty(outputFilename)
+                                    ? Path.ChangeExtension(rptPath, "xml")
+                                    : outputFilename;
+                                writer.WriteToXml(xmlPath);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ignoreErrors)
+                        {
+                            Trace.WriteLine(ex.Message);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                });
+
+            return exitCode;
         }
 
         private static List<string> FindRptPaths(

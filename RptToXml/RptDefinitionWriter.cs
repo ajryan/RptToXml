@@ -70,6 +70,11 @@ namespace RptToXml
 			Trace.Write(stringOutput.ToString());
 		}
 
+        public void WriteToXml(string targetXmlPath)
+        {
+            WriteToXml(System.IO.File.Create(targetXmlPath));
+        }
+
 		public void WriteToXml(System.IO.Stream output)
 		{
 
@@ -82,18 +87,6 @@ namespace RptToXml
             using (XmlWriter writer = XmlWriter.Create(output, settings))
 			{
 				WriteToXml(writer);
-			}
-		}
-
-		public void WriteToXml(string targetXmlPath)
-		{
-			if (_stdOut)
-			{
-				WriteToXml();
-			}
-			else
-            { 
-                WriteToXml(System.IO.File.Create(targetXmlPath));
 			}
 		}
 
