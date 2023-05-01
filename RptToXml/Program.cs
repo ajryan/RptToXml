@@ -1,132 +1,133 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace RptToXml
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		internal static int Main(string[] args)
 		{
-			if (args.Length < 1)
-			{
-				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename | --stdout] [--ignore-errors]");
-				Console.WriteLine("       Input options:");
-				Console.WriteLine("         -r                Recursively convert all rpt files in current directory and sub directories.");
-				Console.WriteLine("         RPT filename      Process a single RPT file");
-				Console.WriteLine("         wildcard          Process files in the current working directory matching the wildcard.");
-				Console.WriteLine();
-				Console.WriteLine("       Output options:");
-				Console.WriteLine("         Default           Replaces .rpt with .xml in file names.");
-				Console.WriteLine("         outputfilename    Write to a specific path. Valid only with single input filename in first argument.");
-				Console.WriteLine("         --stdout          Write the XML to console output. Suppresses all other output text (status, warnings, etc).");
-				Console.WriteLine();
-				Console.WriteLine("       Flags:");
-				Console.WriteLine("         --ignore-errors   When processing multiple files, continue to the next file if an error occurs.");
-				Console.WriteLine();
+            var inputArg = new Argument<string>(
+                name: "input",
+                description:
+                    "-r            Recursively convert all rpt files in current directory and sub directories." + Environment.NewLine +
+                    "RPT filename  Process a single RPT file." + Environment.NewLine +
+                    "wildcard      Process files in the current working directory matching the wildcard.");
 
-				return;
-			}
+            var outputFilenameArg = new Argument<string>(
+                name: "outputfilename",
+                getDefaultValue: () => string.Empty,
+                description: "Write to a specific path. Valid only with single input filename in first argument.");
 
-			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-			string rptPathArg = args[0];
-			var rptPaths = new List<string>();
-			bool ignoreErrFlag = false;
-			bool stdOut = false;
+            var ignoreErrorsOption = new Option<bool>(
+                name: "--ignore-errors",
+                getDefaultValue: () => false,
+                description: "When processing multiple files, continue to the next file if an error occurs.");
 
-			if (args.Contains("--ignore-errors"))
-				ignoreErrFlag = true;
+            var stdoutOption = new Option<bool>(
+                name: "--stdout",
+                getDefaultValue: () => false,
+                description: "Write the XML to console output. Suppresses all other output text (status, warnings, etc). Not valid with outputfilename.");
 
-			if (args.Contains("--stdout"))
-				stdOut = true;
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-			if ("-r".Equals(rptPathArg, StringComparison.InvariantCultureIgnoreCase))
-			{
-				if (args.Length > 1 && !ignoreErrFlag)
-				{
-					Console.WriteLine("Output filename may not be specified with -r .");
-					return;
-				}
-				recursiveFileList(rptPaths, ".");
-			}
-			else if (rptPathArg.Contains("*"))
-			{
-				if (args.Length > 1 && !ignoreErrFlag)
-				{
-					Console.WriteLine("Output filename may not be specified with wildcard.");
-					return;
-				}
-				var directory = Path.GetDirectoryName(rptPathArg);
-				if (String.IsNullOrEmpty(directory))
-				{
-					directory = ".";
-				}
-				var matchingFiles = Directory.GetFiles(directory, searchPattern: Path.GetFileName(rptPathArg));
-				rptPaths.AddRange(matchingFiles.Where(ReportFilenameValid));
-				if (rptPaths.Count == 0)
-				{
-					Trace.WriteLine("No reports matched the wildcard.");
-				}
-			}
-			else
-			{
-				rptPaths.Add(rptPathArg);
-			}
+            int exitCode = 0;
+            var command = new RootCommand("RPT2XML");
+			command.AddArgument(inputArg);
+			command.AddArgument(outputFilenameArg);
+			command.AddOption(ignoreErrorsOption);
+			command.AddOption(stdoutOption);
+            command.SetHandler((
+                    input,
+                    outputFilename,
+                    ignoreErrors,
+                    stdout) => exitCode = Execute(input, outputFilename, ignoreErrors, stdout), inputArg,
+                outputFilenameArg,
+                ignoreErrorsOption, stdoutOption);
 
-			foreach (string rptPath in rptPaths)
-			{
-				try
-				{
-					if(!stdOut)
-						Trace.WriteLine("Dumping " + rptPath);
-					
+            command.Invoke(args);
 
-					using (var writer = new RptDefinitionWriter(rptPath, stdOut))
-					{
-						string xmlPath = args.Length > 1 && !ignoreErrFlag ?
-							args[1] : Path.ChangeExtension(rptPath, "xml");
-						writer.WriteToXml(xmlPath);
-					}
+            return exitCode;
 
-				}
-				catch (Exception ex)
-				{
-					if (ignoreErrFlag)
-						Trace.WriteLine(ex.Message);
-					else
-						throw ex;
-				}
-			}
-		}
-		static void recursiveFileList(List<string> list, string directory)
-		{
-			foreach (string f in Directory.GetFiles(directory, "*.rpt"))
-			{
-				list.Add(f);
-			}
-			foreach (string d in Directory.GetDirectories(directory))
-			{
-				recursiveFileList(list, d);
-			}
-		}
-		static bool ReportFilenameValid(string rptPath)
-		{
-			string extension = Path.GetExtension(rptPath);
-			if (String.IsNullOrEmpty(extension) || !extension.Equals(".rpt", StringComparison.OrdinalIgnoreCase))
-			{
-				Console.WriteLine("Input filename [" + rptPath + "] does not end in .RPT");
-				return false;
-			}
+        }
 
-			if (!File.Exists(rptPath))
-			{
-				Console.WriteLine("Report file [" + rptPath + "] does not exist.");
-				return false;
-			}
+        private static int Execute(
+            string input,
+            string outputFilename,
+            bool ignoreErrors,
+            bool stdOut)
+        {
+            List<string> rptPaths = FindRptPaths(input);
+            if (rptPaths.Count == 0)
+            {
+                string errorMessage = input.Equals("-r", StringComparison.OrdinalIgnoreCase)
+                    ? "No *.RPT files found rescursively in current directory."
+                    : $"No input files matched {input}.";
+				Console.WriteLine(errorMessage);
+                return 1;
+            }
 
-			return true;
-		}
-	}
+            if (rptPaths.Count > 1 && !string.IsNullOrEmpty(outputFilename))
+            {
+                Console.WriteLine($"outputfilename is only allowed with single input file.");
+                return 1;
+            }
+
+            foreach (string rptPath in rptPaths)
+            {
+                if (!File.Exists(rptPath))
+                {
+                    Console.WriteLine($"{rptPath} does not exist.");
+                    return 1;
+                }
+
+                try
+                {
+                    if (!stdOut)
+                    {
+                        Trace.WriteLine("Dumping " + rptPath);
+                    }
+
+                    using (var writer = new RptDefinitionWriter(rptPath, stdOut))
+                    {
+                        string xmlPath = string.IsNullOrEmpty(outputFilename) ? Path.ChangeExtension(rptPath, "xml") : outputFilename;
+                        writer.WriteToXml(xmlPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ignoreErrors)
+                    {
+                        Trace.WriteLine(ex.Message);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        private static List<string> FindRptPaths(
+            string input)
+        {
+            if (input.Equals("-r", StringComparison.OrdinalIgnoreCase))
+            {
+                return Directory.GetFiles(".", "*.rpt", SearchOption.AllDirectories).ToList();
+            }
+
+            if (input.Contains("*"))
+            {
+                return Directory.GetFiles(Path.GetDirectoryName(input) ?? ".", Path.GetFileName(input)).ToList();
+            }
+
+            return new List<string> { input };
+        }
+    }
 }
