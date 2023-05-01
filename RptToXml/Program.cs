@@ -12,7 +12,7 @@ namespace RptToXml
 		{
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors]");
+				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors] [--stdout]");
 				Console.WriteLine("       -r : recursively convert all rpt files in current directory and sub directories");
 				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
 				return;
@@ -20,14 +20,18 @@ namespace RptToXml
 			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 			string rptPathArg = args[0];
 			var rptPaths = new List<string>();
-			int ignoreErrFlag = 0;
+			bool ignoreErrFlag = false;
+			bool stdOut = false;
 
 			if (args.Contains("--ignore-errors"))
-				ignoreErrFlag = 1;
+				ignoreErrFlag = true;
+
+			if (args.Contains("--stdout"))
+				stdOut = true;
 
 			if ("-r".Equals(rptPathArg, StringComparison.InvariantCultureIgnoreCase))
 			{
-				if (args.Length > 1 + ignoreErrFlag)
+				if (args.Length > 1 && !ignoreErrFlag)
 				{
 					Console.WriteLine("Output filename may not be specified with -r .");
 					return;
@@ -36,7 +40,7 @@ namespace RptToXml
 			}
 			else if (rptPathArg.Contains("*"))
 			{
-				if (args.Length > 1 + ignoreErrFlag)
+				if (args.Length > 1 && !ignoreErrFlag)
 				{
 					Console.WriteLine("Output filename may not be specified with wildcard.");
 					return;
@@ -62,11 +66,13 @@ namespace RptToXml
 			{
 				try
 				{
-					Trace.WriteLine("Dumping " + rptPath);
+					if(!stdOut)
+						Trace.WriteLine("Dumping " + rptPath);
+					
 
-					using (var writer = new RptDefinitionWriter(rptPath))
+					using (var writer = new RptDefinitionWriter(rptPath, stdOut))
 					{
-						string xmlPath = args.Length > 1 + ignoreErrFlag ?
+						string xmlPath = args.Length > 1 && !ignoreErrFlag ?
 							args[1] : Path.ChangeExtension(rptPath, "xml");
 						writer.WriteToXml(xmlPath);
 					}
@@ -74,7 +80,7 @@ namespace RptToXml
 				}
 				catch (Exception ex)
 				{
-					if (ignoreErrFlag == 1)
+					if (ignoreErrFlag)
 						Trace.WriteLine(ex.Message);
 					else
 						throw ex;
