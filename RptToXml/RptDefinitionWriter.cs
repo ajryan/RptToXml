@@ -42,8 +42,10 @@ namespace RptToXml
 			_oleCompoundFile = new CompoundFile(filename);
 
 			if (!stdOut)
-				Trace.WriteLine("Loaded report");
-		}
+            {
+                Trace.WriteLine("Loaded report");
+            }
+        }
 
 		public RptDefinitionWriter(ReportDocument value)
 		{
@@ -53,12 +55,14 @@ namespace RptToXml
 
 		public void WriteToXml()
 		{
-			XmlWriterSettings settings = new XmlWriterSettings();
-			settings.CheckCharacters = true;
-			settings.Encoding = Encoding.UTF8;
-			settings.Indent = true;
+			XmlWriterSettings settings = new XmlWriterSettings
+            {
+                CheckCharacters = true,
+                Encoding = Encoding.UTF8,
+                Indent = true
+            };
 
-			StringBuilder stringOutput = new StringBuilder();
+            StringBuilder stringOutput = new StringBuilder();
 			using (XmlWriter writer = XmlWriter.Create(stringOutput, settings))
 			{
 				WriteToXml(writer);
@@ -69,11 +73,13 @@ namespace RptToXml
 		public void WriteToXml(System.IO.Stream output)
 		{
 
-			XmlWriterSettings settings = new XmlWriterSettings();
-			settings.CheckCharacters = true;
-			settings.Encoding = Encoding.UTF8;
-			settings.Indent = true;
-			using (XmlWriter writer = XmlWriter.Create(output, settings))
+			XmlWriterSettings settings = new XmlWriterSettings
+            {
+                CheckCharacters = true,
+                Encoding = Encoding.UTF8,
+                Indent = true
+            };
+            using (XmlWriter writer = XmlWriter.Create(output, settings))
 			{
 				WriteToXml(writer);
 			}
@@ -85,17 +91,20 @@ namespace RptToXml
 			{
 				WriteToXml();
 			}
-			else { 
-			WriteToXml(System.IO.File.Create(targetXmlPath));
+			else
+            { 
+                WriteToXml(System.IO.File.Create(targetXmlPath));
 			}
 		}
 
 		public void WriteToXml(XmlWriter writer)
 		{
 			if (!_stdOut)
-				Trace.WriteLine("Writing to XML");
-			
-			writer.WriteStartDocument();
+            {
+                Trace.WriteLine("Writing to XML");
+            }
+
+            writer.WriteStartDocument();
 			ProcessReport(_report, writer);
 			writer.WriteEndDocument();
 			writer.Flush();
@@ -108,28 +117,33 @@ namespace RptToXml
 		private static void WriteAttributeString(XmlWriter writer, string name, string value)
 		{
 			string myValue = value == null ? null : CompiledRegexp.Replace(value, "");
-			writer.WriteAttributeString(name, myValue);
+			writer.WriteAttributeString(name, myValue ?? "");
 		}
 		private static void WriteString(XmlWriter writer, string value)
 		{
 			string myValue = value == null ? null : CompiledRegexp.Replace(value, "");
-			writer.WriteString(myValue);
+			writer.WriteString(myValue ?? "");
 		}
-		//This is a recursive method.  GetSubreports() calls it.
+
+        //This is a recursive method.  GetSubreports() calls it.
 		private void ProcessReport(ReportDocument report, XmlWriter writer)
 		{
 			writer.WriteStartElement("Report");
 
 			WriteAttributeString(writer, "Name", report.Name);
 			if (!_stdOut)
-				Trace.WriteLine("Writing report " + report.Name);
+            {
+                Trace.WriteLine("Writing report " + report.Name);
+            }
 
-			if (!report.IsSubreport)
+            if (!report.IsSubreport)
 			{
 				if (!_stdOut)
-					Trace.WriteLine("Writing header info");
+                {
+                    Trace.WriteLine("Writing header info");
+                }
 
-				WriteAttributeString(writer, "FileName", report.FileName.Replace("rassdk://", ""));
+                WriteAttributeString(writer, "FileName", report.FileName.Replace("rassdk://", ""));
 				WriteAttributeString(writer, "HasSavedData", report.HasSavedData.ToString());
 
 				if (_oleCompoundFile != null)
@@ -226,9 +240,11 @@ namespace RptToXml
 
 			CRReportDefModel.PrintOptions rdmPrintOptions = GetRASRDMPrintOptionsObject(report.Name, report);
 			if (rdmPrintOptions != null)
-				GetPageMarginConditionFormulas(rdmPrintOptions, writer);
+            {
+                GetPageMarginConditionFormulas(rdmPrintOptions, writer);
+            }
 
-			writer.WriteEndElement();
+            writer.WriteEndElement();
 		}
 
 		private void GetSubReportsLinks(ReportDocument report, XmlWriter writer)
@@ -239,20 +255,22 @@ namespace RptToXml
 				CRReportDefModel.SubreportLinks subReportLinks = _report.ReportClientDocument.SubreportController.GetSubreportLinks(report.Name);
 
 				if (subReportLinks != null)
-					foreach (CRReportDefModel.SubreportLink link in subReportLinks)
-					{
-						writer.WriteStartElement("SubReportLink");
-						WriteAttributeString(writer, "LinkedParameterName", link.LinkedParameterName);
-						WriteAttributeString(writer, "MainReportFieldName", link.MainReportFieldName);
-						WriteAttributeString(writer, "SubreportFieldName", link.SubreportFieldName);
-						writer.WriteEndElement();
-					}
+                {
+                    foreach (CRReportDefModel.SubreportLink link in subReportLinks)
+                    {
+                        writer.WriteStartElement("SubReportLink");
+                        WriteAttributeString(writer, "LinkedParameterName", link.LinkedParameterName);
+                        WriteAttributeString(writer, "MainReportFieldName", link.MainReportFieldName);
+                        WriteAttributeString(writer, "SubreportFieldName", link.SubreportFieldName);
+                        writer.WriteEndElement();
+                    }
+                }
 
-				writer.WriteEndElement();
+                writer.WriteEndElement();
 			}
 		}
 
-		[HandleProcessCorruptedStateExceptionsAttribute]
+		[HandleProcessCorruptedStateExceptions]
 		private void GetSubreports(ReportDocument report, XmlWriter writer)
 		{
 			writer.WriteStartElement("SubReports");
@@ -260,8 +278,10 @@ namespace RptToXml
 			try
 			{
 				foreach (ReportDocument subreport in report.Subreports)
-					ProcessReport(subreport, writer);
-			}
+                {
+                    ProcessReport(subreport, writer);
+                }
+            }
 			catch (Exception e)
 			{
 				Console.WriteLine($"Error loading subpreport, {e}");
@@ -299,13 +319,19 @@ namespace RptToXml
 
 				writer.WriteStartElement("SourceFields");
 				foreach (FieldDefinition fd in tl.SourceFields)
-					GetFieldDefinition(fd, writer);
-				writer.WriteEndElement();
+                {
+                    GetFieldDefinition(fd, writer);
+                }
+
+                writer.WriteEndElement();
 
 				writer.WriteStartElement("DestinationFields");
 				foreach (FieldDefinition fd in tl.DestinationFields)
-					GetFieldDefinition(fd, writer);
-				writer.WriteEndElement();
+                {
+                    GetFieldDefinition(fd, writer);
+                }
+
+                writer.WriteEndElement();
 
 				writer.WriteEndElement();
 			}
@@ -317,17 +343,12 @@ namespace RptToXml
 		{
 			writer.WriteStartElement("CustomFunctions");
 
-			CRDataDefModel.CustomFunctions funcs;
-			if (!report.IsSubreport)
-			{
-				funcs = report.ReportClientDocument.CustomFunctionController.GetCustomFunctions();
-			}
-			else
-			{
-				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
-				//funcs = subrptClientDoc.CustomFunctionController.GetCustomFunctions();
-				funcs = null;
-			}
+            // TODO:
+            // var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+            // funcs = subrptClientDoc.CustomFunctionController.GetCustomFunctions();
+            CRDataDefModel.CustomFunctions funcs = !report.IsSubreport
+                ? report.ReportClientDocument.CustomFunctionController.GetCustomFunctions()
+                : null;
 
 			if (funcs != null)
 			{
@@ -389,8 +410,7 @@ namespace RptToXml
 			WriteAttributeString(writer, "Password", table.ConnectionInfo.Password);
 			writer.WriteEndElement();
 
-			var commandTable = table as CRDataDefModel.CommandTable;
-			if (commandTable != null)
+            if (table is CRDataDefModel.CommandTable commandTable)
 			{
 				var cmdTable = commandTable;
 				writer.WriteStartElement("Command");
@@ -481,20 +501,28 @@ namespace RptToXml
 
 			writer.WriteStartElement("FormulaFieldDefinitions");
 			foreach (var field in report.DataDefinition.FormulaFields.OfType<FieldDefinition>().OrderBy(field => field.FormulaName))
-				GetFieldObject(field, report, writer);
-			writer.WriteEndElement();
+            {
+                GetFieldObject(field, report, writer);
+            }
+
+            writer.WriteEndElement();
 
 			writer.WriteStartElement("GroupNameFieldDefinitions");
 			foreach (var field in report.DataDefinition.GroupNameFields)
-				GetFieldObject(field, report, writer);
-			writer.WriteEndElement();
+            {
+                GetFieldObject(field, report, writer);
+            }
+
+            writer.WriteEndElement();
 
 			writer.WriteStartElement("ParameterFieldDefinitions");
 			try
 			{
 				foreach (var field in report.DataDefinition.ParameterFields)
-					GetFieldObject(field, report, writer);
-			}
+                {
+                    GetFieldObject(field, report, writer);
+                }
+            }
 			catch (Exception e)
 			{
 				Console.WriteLine($"Error processing ParameterFieldDefinitions, {e}");
@@ -503,30 +531,37 @@ namespace RptToXml
 
 			writer.WriteStartElement("RunningTotalFieldDefinitions");
 			foreach (var field in report.DataDefinition.RunningTotalFields)
-				GetFieldObject(field, report, writer);
-			writer.WriteEndElement();
+            {
+                GetFieldObject(field, report, writer);
+            }
+
+            writer.WriteEndElement();
 
 			writer.WriteStartElement("SQLExpressionFields");
 			foreach (var field in report.DataDefinition.SQLExpressionFields)
-				GetFieldObject(field, report, writer);
-			writer.WriteEndElement();
+            {
+                GetFieldObject(field, report, writer);
+            }
+
+            writer.WriteEndElement();
 
 			writer.WriteStartElement("SummaryFields");
 			foreach (var field in report.DataDefinition.SummaryFields)
-				GetFieldObject(field, report, writer);
-			writer.WriteEndElement();
+            {
+                GetFieldObject(field, report, writer);
+            }
+
+            writer.WriteEndElement();
 
 			writer.WriteEndElement();
 		}
 
-		[HandleProcessCorruptedStateExceptionsAttribute]
+		[HandleProcessCorruptedStateExceptions]
 		private void GetFieldObject(Object fo, ReportDocument report, XmlWriter writer)
 		{
-			if (fo is DatabaseFieldDefinition)
+			if (fo is DatabaseFieldDefinition df)
 			{
-				var df = (DatabaseFieldDefinition)fo;
-
-				writer.WriteStartElement("DatabaseFieldDefinition");
+                writer.WriteStartElement("DatabaseFieldDefinition");
 
 				WriteAttributeString(writer, "FormulaName", df.FormulaName);
 				WriteAttributeString(writer, "Kind", df.Kind.ToString());
@@ -536,11 +571,9 @@ namespace RptToXml
 				WriteAttributeString(writer, "ValueType", df.ValueType.ToString());
 
 			}
-			else if (fo is FormulaFieldDefinition)
+			else if (fo is FormulaFieldDefinition ff)
 			{
-				var ff = (FormulaFieldDefinition)fo;
-
-				writer.WriteStartElement("FormulaFieldDefinition");
+                writer.WriteStartElement("FormulaFieldDefinition");
 
 				WriteAttributeString(writer, "FormulaName", ff.FormulaName);
 				WriteAttributeString(writer, "Kind", ff.Kind.ToString());
@@ -550,11 +583,9 @@ namespace RptToXml
 				WriteString(writer, ff.Text);
 
 			}
-			else if (fo is GroupNameFieldDefinition)
+			else if (fo is GroupNameFieldDefinition gnf)
 			{
-				var gnf = (GroupNameFieldDefinition)fo;
-
-				writer.WriteStartElement("GroupNameFieldDefinition");
+                writer.WriteStartElement("GroupNameFieldDefinition");
 				try
 				{
 					WriteAttributeString(writer, "FormulaName", gnf.FormulaName);
@@ -570,11 +601,9 @@ namespace RptToXml
 					Console.WriteLine($"Error loading formula for group '{gnf.GroupNameFieldName}', {e}");
 				}
 			}
-			else if (fo is ParameterFieldDefinition)
+			else if (fo is ParameterFieldDefinition pf)
 			{
-				var pf = (ParameterFieldDefinition)fo;
-
-				// if it is a linked parameter, it is passed into a subreport. Just record the actual linkage in the main report.
+                // if it is a linked parameter, it is passed into a subreport. Just record the actual linkage in the main report.
 				// The parameter will be reported in full when the subreport is exported.  
 				var parameterIsLinked = (!report.IsSubreport && pf.IsLinked());
 
@@ -590,7 +619,7 @@ namespace RptToXml
 				{
 					var ddm_pf = GetRASDDMParameterFieldObject(pf.Name, report);
 
-					WriteAttributeString(writer, "AllowCustomCurrentValues", (ddm_pf == null ? false : ddm_pf.AllowCustomCurrentValues).ToString());
+					WriteAttributeString(writer, "AllowCustomCurrentValues", (ddm_pf != null && ddm_pf.AllowCustomCurrentValues).ToString());
 					WriteAttributeString(writer, "EditMask", pf.EditMask);
 					WriteAttributeString(writer, "EnableAllowEditingDefaultValue", pf.EnableAllowEditingDefaultValue.ToString());
 					WriteAttributeString(writer, "EnableAllowMultipleValue", pf.EnableAllowMultipleValue.ToString());
@@ -665,16 +694,18 @@ namespace RptToXml
 				}
 
 			}
-			else if (fo is RunningTotalFieldDefinition)
+			else if (fo is RunningTotalFieldDefinition rtf)
 			{
-				var rtf = (RunningTotalFieldDefinition)fo;
-
-				writer.WriteStartElement("RunningTotalFieldDefinition");
+                writer.WriteStartElement("RunningTotalFieldDefinition");
 				//WriteAttributeString(writer,"EvaluationConditionType", rtf.EvaluationCondition);
 				WriteAttributeString(writer, "EvaluationConditionType", rtf.EvaluationConditionType.ToString());
 				WriteAttributeString(writer, "FormulaName", rtf.FormulaName);
-				if (rtf.Group != null) WriteAttributeString(writer, "Group", rtf.Group.ToString());
-				WriteAttributeString(writer, "Kind", rtf.Kind.ToString());
+				if (rtf.Group != null)
+                {
+                    WriteAttributeString(writer, "Group", rtf.Group.ToString());
+                }
+
+                WriteAttributeString(writer, "Kind", rtf.Kind.ToString());
 				WriteAttributeString(writer, "Name", rtf.Name);
 				WriteAttributeString(writer, "NumberOfBytes", rtf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "Operation", rtf.Operation.ToString());
@@ -682,17 +713,18 @@ namespace RptToXml
 				WriteAttributeString(writer, "ResetConditionType", rtf.ResetConditionType.ToString());
 
 				if (rtf.SecondarySummarizedField != null)
-					WriteAttributeString(writer, "SecondarySummarizedField", rtf.SecondarySummarizedField.FormulaName);
+                {
+                    WriteAttributeString(writer, "SecondarySummarizedField", rtf.SecondarySummarizedField.FormulaName);
+                }
 
-				WriteAttributeString(writer, "SummarizedField", rtf.SummarizedField.FormulaName);
+                WriteAttributeString(writer, "SummarizedField", rtf.SummarizedField.FormulaName);
 				WriteAttributeString(writer, "ValueType", rtf.ValueType.ToString());
 
 			}
-			else if (fo is SpecialVarFieldDefinition)
+			else if (fo is SpecialVarFieldDefinition svf)
 			{
 				writer.WriteStartElement("SpecialVarFieldDefinition");
-				var svf = (SpecialVarFieldDefinition)fo;
-				WriteAttributeString(writer, "FormulaName", svf.FormulaName);
+                WriteAttributeString(writer, "FormulaName", svf.FormulaName);
 				WriteAttributeString(writer, "Kind", svf.Kind.ToString());
 				WriteAttributeString(writer, "Name", svf.Name);
 				WriteAttributeString(writer, "NumberOfBytes", svf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
@@ -700,12 +732,11 @@ namespace RptToXml
 				WriteAttributeString(writer, "ValueType", svf.ValueType.ToString());
 
 			}
-			else if (fo is SQLExpressionFieldDefinition)
+			else if (fo is SQLExpressionFieldDefinition sef)
 			{
 				writer.WriteStartElement("SQLExpressionFieldDefinition");
-				var sef = (SQLExpressionFieldDefinition)fo;
 
-				WriteAttributeString(writer, "FormulaName", sef.FormulaName);
+                WriteAttributeString(writer, "FormulaName", sef.FormulaName);
 				WriteAttributeString(writer, "Kind", sef.Kind.ToString());
 				WriteAttributeString(writer, "Name", sef.Name);
 				WriteAttributeString(writer, "NumberOfBytes", sef.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
@@ -713,24 +744,28 @@ namespace RptToXml
 				WriteAttributeString(writer, "ValueType", sef.ValueType.ToString());
 
 			}
-			else if (fo is SummaryFieldDefinition)
+			else if (fo is SummaryFieldDefinition sf)
 			{
 				writer.WriteStartElement("SummaryFieldDefinition");
 
-				var sf = (SummaryFieldDefinition)fo;
-
-				WriteAttributeString(writer, "FormulaName", sf.FormulaName);
+                WriteAttributeString(writer, "FormulaName", sf.FormulaName);
 
 				if (sf.Group != null)
-					WriteAttributeString(writer, "Group", sf.Group.ToString());
+                {
+                    WriteAttributeString(writer, "Group", sf.Group.ToString());
+                }
 
-				WriteAttributeString(writer, "Kind", sf.Kind.ToString());
+                WriteAttributeString(writer, "Kind", sf.Kind.ToString());
 				WriteAttributeString(writer, "Name", sf.Name);
 				WriteAttributeString(writer, "NumberOfBytes", sf.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "Operation", sf.Operation.ToString());
 				WriteAttributeString(writer, "OperationParameter", sf.OperationParameter.ToString(CultureInfo.InvariantCulture));
-				if (sf.SecondarySummarizedField != null) WriteAttributeString(writer, "SecondarySummarizedField", sf.SecondarySummarizedField.ToString());
-				WriteAttributeString(writer, "SummarizedField", sf.SummarizedField.ToString());
+				if (sf.SecondarySummarizedField != null)
+                {
+                    WriteAttributeString(writer, "SecondarySummarizedField", sf.SecondarySummarizedField.ToString());
+                }
+
+                WriteAttributeString(writer, "SummarizedField", sf.SummarizedField.ToString());
 				WriteAttributeString(writer, "ValueType", sf.ValueType.ToString());
 
 			}
@@ -754,7 +789,7 @@ namespace RptToXml
 			return rdm;
 		}
 
-		private void GetAreaFormat(Area area, ReportDocument report, XmlWriter writer)
+		private void GetAreaFormat(Area area, XmlWriter writer)
 		{
 			writer.WriteStartElement("AreaFormat");
 
@@ -790,16 +825,23 @@ namespace RptToXml
 			WriteAttributeString(writer, "RightLineStyle", border.RightLineStyle.ToString());
 			WriteAttributeString(writer, "TopLineStyle", border.TopLineStyle.ToString());
 
-			CRReportDefModel.ISCRReportObject rdm_ro = GetRASRDMReportObject(ro.Name, report);
-			if (rdm_ro != null)
-				GetBorderConditionFormulas(rdm_ro, writer);
+			CRReportDefModel.ISCRReportObject rdmRo = GetRASRDMReportObject(ro.Name, report);
+			if (rdmRo != null)
+            {
+                GetBorderConditionFormulas(rdmRo, writer);
+            }
 
-			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-				GetColorFormat(border.BackgroundColor, writer, "BackgroundColor");
-			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-				GetColorFormat(border.BorderColor, writer, "BorderColor");
+            if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+            {
+                GetColorFormat(border.BackgroundColor, writer, "BackgroundColor");
+            }
 
-			writer.WriteEndElement();
+            if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+            {
+                GetColorFormat(border.BorderColor, writer, "BorderColor");
+            }
+
+            writer.WriteEndElement();
 		}
 
 		private static void GetColorFormat(Color color, XmlWriter writer, String elementName = "Color")
@@ -815,7 +857,7 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
-		private void GetFontFormat(Font font, ReportDocument report, XmlWriter writer)
+		private void GetFontFormat(Font font, XmlWriter writer)
 		{
 			writer.WriteStartElement("Font");
 
@@ -839,7 +881,7 @@ namespace RptToXml
 			writer.WriteEndElement();
 		}
 
-		private void GetObjectFormat(ReportObject ro, ReportDocument report, XmlWriter writer)
+		private void GetObjectFormat(ReportObject ro, XmlWriter writer)
 		{
 			writer.WriteStartElement("ObjectFormat");
 
@@ -872,13 +914,17 @@ namespace RptToXml
 
 			CRReportDefModel.Section rdm_ro = GetRASRDMSectionObjectFromCRENGSectionObject(section.Name, report);
 			if (rdm_ro != null)
-				GetSectionAreaFormatConditionFormulas(rdm_ro, writer);
+            {
+                GetSectionAreaFormatConditionFormulas(rdm_ro, writer);
+            }
 
 
-			if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-				GetColorFormat(section.SectionFormat.BackgroundColor, writer, "BackgroundColor");
+            if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+            {
+                GetColorFormat(section.SectionFormat.BackgroundColor, writer, "BackgroundColor");
+            }
 
-			writer.WriteEndElement();
+            writer.WriteEndElement();
 		}
 
 		private void GetReportDefinition(ReportDocument report, XmlWriter writer)
@@ -902,9 +948,11 @@ namespace RptToXml
 				WriteAttributeString(writer, "Name", area.Name);
 
 				if ((ShowFormatTypes & FormatTypes.AreaFormat) == FormatTypes.AreaFormat)
-					GetAreaFormat(area, report, writer);
+                {
+                    GetAreaFormat(area, writer);
+                }
 
-				GetSections(area, report, writer);
+                GetSections(area, report, writer);
 
 				writer.WriteEndElement();
 			}
@@ -925,9 +973,11 @@ namespace RptToXml
 				WriteAttributeString(writer, "Name", section.Name);
 
 				if ((ShowFormatTypes & FormatTypes.SectionFormat) == FormatTypes.SectionFormat)
-					GetSectionFormat(section, report, writer);
+                {
+                    GetSectionFormat(section, report, writer);
+                }
 
-				GetReportObjects(section, report, writer);
+                GetReportObjects(section, report, writer);
 
 				writer.WriteEndElement();
 			}
@@ -952,117 +1002,119 @@ namespace RptToXml
 				WriteAttributeString(writer, "Left", reportObject.Left.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "Width", reportObject.Width.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "Height", reportObject.Height.ToString(CultureInfo.InvariantCulture));
-				if (reportObject is SubreportObject)
+				if (reportObject is SubreportObject srobj)
 				{
-					var srobj = (SubreportObject)reportObject;
-					WriteAttributeString(writer, "SubreportName", srobj.SubreportName);
+                    WriteAttributeString(writer, "SubreportName", srobj.SubreportName);
 					WriteAttributeString(writer, "EnableOnDemand", srobj.EnableOnDemand.ToString(CultureInfo.InvariantCulture));
 
 				}
-				else if (reportObject is BoxObject)
+				else if (reportObject is BoxObject bo)
 				{
-					var bo = (BoxObject)reportObject;
-					WriteAttributeString(writer, "Bottom", bo.Bottom.ToString(CultureInfo.InvariantCulture));
+                    WriteAttributeString(writer, "Bottom", bo.Bottom.ToString(CultureInfo.InvariantCulture));
 					WriteAttributeString(writer, "EnableExtendToBottomOfSection", bo.EnableExtendToBottomOfSection.ToString());
 					WriteAttributeString(writer, "EndSectionName", bo.EndSectionName);
 					WriteAttributeString(writer, "LineStyle", bo.LineStyle.ToString());
 					WriteAttributeString(writer, "LineThickness", bo.LineThickness.ToString(CultureInfo.InvariantCulture));
 					WriteAttributeString(writer, "Right", bo.Right.ToString(CultureInfo.InvariantCulture));
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-						GetColorFormat(bo.LineColor, writer, "LineColor");
-				}
-				else if (reportObject is DrawingObject)
+                    {
+                        GetColorFormat(bo.LineColor, writer, "LineColor");
+                    }
+                }
+				else if (reportObject is DrawingObject dobj)
 				{
-					var dobj = (DrawingObject)reportObject;
-					WriteAttributeString(writer, "Bottom", dobj.Bottom.ToString(CultureInfo.InvariantCulture));
+                    WriteAttributeString(writer, "Bottom", dobj.Bottom.ToString(CultureInfo.InvariantCulture));
 					WriteAttributeString(writer, "EnableExtendToBottomOfSection", dobj.EnableExtendToBottomOfSection.ToString());
 					WriteAttributeString(writer, "EndSectionName", dobj.EndSectionName);
 					WriteAttributeString(writer, "LineStyle", dobj.LineStyle.ToString());
 					WriteAttributeString(writer, "LineThickness", dobj.LineThickness.ToString(CultureInfo.InvariantCulture));
 					WriteAttributeString(writer, "Right", dobj.Right.ToString(CultureInfo.InvariantCulture));
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-						GetColorFormat(dobj.LineColor, writer, "LineColor");
-				}
-				else if (reportObject is FieldHeadingObject)
+                    {
+                        GetColorFormat(dobj.LineColor, writer, "LineColor");
+                    }
+                }
+				else if (reportObject is FieldHeadingObject fh)
 				{
-					var fh = (FieldHeadingObject)reportObject;
-					var rasrdm_fh = (CRReportDefModel.FieldHeadingObject)rasrdm_ro;
+                    var rasrdmFh = (CRReportDefModel.FieldHeadingObject)rasrdm_ro;
 					WriteAttributeString(writer, "FieldObjectName", fh.FieldObjectName);
-					WriteAttributeString(writer, "MaxNumberOfLines", rasrdm_fh.MaxNumberOfLines.ToString());
+					WriteAttributeString(writer, "MaxNumberOfLines", rasrdmFh.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", fh.Text);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-						GetColorFormat(fh.Color, writer);
+                    {
+                        GetColorFormat(fh.Color, writer);
+                    }
 
-					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+                    if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
 					{
-						GetFontFormat(fh.Font, report, writer);
-						GetFontColorConditionFormulas(rasrdm_fh.FontColor, writer);
+						GetFontFormat(fh.Font, writer);
+						GetFontColorConditionFormulas(rasrdmFh.FontColor, writer);
 					}
 				}
-				else if (reportObject is FieldObject)
+				else if (reportObject is FieldObject fo)
 				{
-					var fo = (FieldObject)reportObject;
-					var rasrdm_fo = (CRReportDefModel.FieldObject)rasrdm_ro;
+                    var rasrdmFo = (CRReportDefModel.FieldObject)rasrdm_ro;
 
 					if (fo.DataSource != null)
-						WriteAttributeString(writer, "DataSource", fo.DataSource.FormulaName);
+                    {
+                        WriteAttributeString(writer, "DataSource", fo.DataSource.FormulaName);
+                    }
 
-					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-						GetColorFormat(fo.Color, writer);
+                    if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
+                    {
+                        GetColorFormat(fo.Color, writer);
+                    }
 
-					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+                    if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
 					{
-						GetFontFormat(fo.Font, report, writer);
-						GetFontColorConditionFormulas(rasrdm_fo.FontColor, writer);
+						GetFontFormat(fo.Font, writer);
+						GetFontColorConditionFormulas(rasrdmFo.FontColor, writer);
 					}
 
 				}
-				else if (reportObject is TextObject)
+				else if (reportObject is TextObject tobj)
 				{
-					var tobj = (TextObject)reportObject;
-					var rasrdm_tobj = (CRReportDefModel.TextObject)rasrdm_ro;
+                    var rasrdmTobj = (CRReportDefModel.TextObject)rasrdm_ro;
 
-					WriteAttributeString(writer, "MaxNumberOfLines", rasrdm_tobj.MaxNumberOfLines.ToString());
+					WriteAttributeString(writer, "MaxNumberOfLines", rasrdmTobj.MaxNumberOfLines.ToString());
 					writer.WriteElementString("Text", tobj.Text);
 
 					if ((ShowFormatTypes & FormatTypes.Color) == FormatTypes.Color)
-						GetColorFormat(tobj.Color, writer);
-					if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
+                    {
+                        GetColorFormat(tobj.Color, writer);
+                    }
+
+                    if ((ShowFormatTypes & FormatTypes.Font) == FormatTypes.Font)
 					{
-						GetFontFormat(tobj.Font, report, writer);
-						GetFontColorConditionFormulas(rasrdm_tobj.FontColor, writer);
+						GetFontFormat(tobj.Font, writer);
+						GetFontColorConditionFormulas(rasrdmTobj.FontColor, writer);
 					}
 				}
 
 				if ((ShowFormatTypes & FormatTypes.Border) == FormatTypes.Border)
-					GetBorderFormat(reportObject, report, writer);
+                {
+                    GetBorderFormat(reportObject, report, writer);
+                }
 
-				if ((ShowFormatTypes & FormatTypes.ObjectFormat) == FormatTypes.ObjectFormat)
-					GetObjectFormat(reportObject, report, writer);
+                if ((ShowFormatTypes & FormatTypes.ObjectFormat) == FormatTypes.ObjectFormat)
+                {
+                    GetObjectFormat(reportObject, writer);
+                }
 
 
-				if (rasrdm_ro != null)
-					GetObjectFormatConditionFormulas(rasrdm_ro, writer);
+                if (rasrdm_ro != null)
+                {
+                    GetObjectFormatConditionFormulas(rasrdm_ro, writer);
+                }
 
-				writer.WriteEndElement();
+                writer.WriteEndElement();
 			}
 
 			writer.WriteEndElement();
 		}
 
-		// pretty much straight from api docs
-		private CommonFieldFormat GetCommonFieldFormat(string reportObjectName, ReportDocument report)
-		{
-			FieldObject field = report.ReportDefinition.ReportObjects[reportObjectName] as FieldObject;
-			if (field != null)
-			{
-				return field.FieldFormat.CommonFormat;
-			}
-			return null;
-		}
-
-		public void Dispose()
+        public void Dispose()
 		{
 			Dispose(true);
 			GC.SuppressFinalize(this);
@@ -1073,9 +1125,11 @@ namespace RptToXml
 			if (disposing)
 			{
 				if (_report != null && _createdReport)
-					_report.Dispose();
+                {
+                    _report.Dispose();
+                }
 
-				_report = null;
+                _report = null;
 				_rcd = null;
 
 				if (_oleCompoundFile != null)
