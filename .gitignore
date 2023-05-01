@@ -188,3 +188,4 @@ FakesAssemblies/
 
 #other
 .vs
+*/Samples/*.xml
