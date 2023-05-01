@@ -12,11 +12,24 @@ namespace RptToXml
 		{
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename] [--ignore-errors] [--stdout]");
-				Console.WriteLine("       -r : recursively convert all rpt files in current directory and sub directories");
-				Console.WriteLine("       outputfilename argument is valid only with single filename in first argument");
+				Console.WriteLine("Usage: RptToXml.exe < -r | RPT filename | wildcard> [outputfilename | --stdout] [--ignore-errors]");
+				Console.WriteLine("       Input options:");
+				Console.WriteLine("         -r                Recursively convert all rpt files in current directory and sub directories.");
+				Console.WriteLine("         RPT filename      Process a single RPT file");
+				Console.WriteLine("         wildcard          Process files in the current working directory matching the wildcard.");
+				Console.WriteLine();
+				Console.WriteLine("       Output options:");
+				Console.WriteLine("         Default           Replaces .rpt with .xml in file names.");
+				Console.WriteLine("         outputfilename    Write to a specific path. Valid only with single input filename in first argument.");
+				Console.WriteLine("         --stdout          Write the XML to console output. Suppresses all other output text (status, warnings, etc).");
+				Console.WriteLine();
+				Console.WriteLine("       Flags:");
+				Console.WriteLine("         --ignore-errors   When processing multiple files, continue to the next file if an error occurs.");
+				Console.WriteLine();
+
 				return;
 			}
+
 			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 			string rptPathArg = args[0];
 			var rptPaths = new List<string>();
