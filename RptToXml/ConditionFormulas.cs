@@ -69,7 +69,10 @@ namespace RptToXml
 
 			return _rcd.ReportDocument.PrintOptions;
 		}
-
+		private CRDataDefModel.ISCRField GetRASField(FormulaFieldDefinition ff)
+		{
+			return _rcd.DataDefinition.FormulaFields.FindField(ff.FormulaName, CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameFormula);
+		}
 		#endregion Get ReportAppServer Objects
 
 		private static void GetBorderConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)

@@ -566,13 +566,19 @@ namespace RptToXml
 			}
 			else if (fo is FormulaFieldDefinition ff)
 			{
-                writer.WriteStartElement("FormulaFieldDefinition");
+				dynamic rasField = GetRASField(ff);
+
+				writer.WriteStartElement("FormulaFieldDefinition");
 
 				WriteAttributeString(writer, "FormulaName", ff.FormulaName);
 				WriteAttributeString(writer, "Kind", ff.Kind.ToString());
 				WriteAttributeString(writer, "Name", ff.Name);
 				WriteAttributeString(writer, "NumberOfBytes", ff.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "ValueType", ff.ValueType.ToString());
+				if (rasField != null)
+				{
+					WriteAttributeString(writer, "Syntax", rasField.Syntax.ToString());
+				}
 				WriteString(writer, ff.Text);
 
 			}
