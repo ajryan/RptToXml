@@ -69,7 +69,7 @@ namespace RptToXml
 
 			return _rcd.ReportDocument.PrintOptions;
 		}
-
+	
 		#endregion Get ReportAppServer Objects
 
 		private static void GetBorderConditionFormulas(CRReportDefModel.ISCRReportObject ro, XmlWriter writer)

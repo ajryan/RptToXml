@@ -566,13 +566,20 @@ namespace RptToXml
 			}
 			else if (fo is FormulaFieldDefinition ff)
 			{
-                writer.WriteStartElement("FormulaFieldDefinition");
+				var ddm_ff = GetRASDDMFormulaFieldObject(ff.Name, report);
+			
+
+				writer.WriteStartElement("FormulaFieldDefinition");
 
 				WriteAttributeString(writer, "FormulaName", ff.FormulaName);
 				WriteAttributeString(writer, "Kind", ff.Kind.ToString());
 				WriteAttributeString(writer, "Name", ff.Name);
 				WriteAttributeString(writer, "NumberOfBytes", ff.NumberOfBytes.ToString(CultureInfo.InvariantCulture));
 				WriteAttributeString(writer, "ValueType", ff.ValueType.ToString());
+				if (ddm_ff != null)
+				{
+					WriteAttributeString(writer, "Syntax", ddm_ff.Syntax.ToString());
+				}
 				WriteString(writer, ff.Text);
 
 			}
@@ -778,6 +785,23 @@ namespace RptToXml
 			{
 				rdm = _rcd.DataDefController.DataDefinition.ParameterFields.FindField(fieldName,
 					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.ParameterField;
+			}
+			return rdm;
+		}
+
+		private CRDataDefModel.FormulaField GetRASDDMFormulaFieldObject(string fieldName, ReportDocument report)
+		{
+			CRDataDefModel.FormulaField rdm;
+			if (report.IsSubreport)
+			{
+				var subrptClientDoc = _report.ReportClientDocument.SubreportController.GetSubreport(report.Name);
+				rdm = subrptClientDoc.DataDefController.DataDefinition.FormulaFields.FindField(fieldName,
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.FormulaField;
+			}
+			else
+			{
+				rdm = _rcd.DataDefController.DataDefinition.FormulaFields.FindField(fieldName,
+					CRDataDefModel.CrFieldDisplayNameTypeEnum.crFieldDisplayNameName) as CRDataDefModel.FormulaField;
 			}
 			return rdm;
 		}
